@@ -1,6 +1,11 @@
 # Svelte-table
 the purpose of this component is to be a reausable html table wrapper without needing to coding too much javascript.
 
+##
+```npm install @fabiohvp/svelte-table```
+or
+```yarn add @fabiohvp/svelte-table```
+
 ```
 <script>
 	import Table, { Row /*, Search */ } from "@fabiohvp/svelte-table";
