@@ -1,33 +1,46 @@
-*Psst — looking for an app template? Go here --> [sveltejs/template](https://github.com/sveltejs/template)*
+# Svelte-table
+the purpose of this component is to be a reausable html table wrapper without needing to coding too much javascript.
 
----
+```
+<script>
+	import Table, { Row /*, Search */ } from "@fabiohvp/svelte-table";
+	
+	const rows = [
+		{name: 'a', age:12}, 
+		{name: 'b', age: 10}, 
+		{name: 'c', age: 13}, 
+		{name: 'd', age: 21}, 
+		{name: 'e', age: 11}
+	];
+	
+	let page = 0; //first page
+	let pageSize = 2; //optional, 10 by default
+	
+	function cellOnClick(row) { //just sample
+		console.log(row);
+	}
+</script>
 
-# component-template
-
-A base for building shareable Svelte components. Clone it with [degit](https://github.com/Rich-Harris/degit):
-
-```bash
-npx degit sveltejs/component-template my-new-component
-cd my-new-component
-npm install # or yarn
+<Table bind:page rows={rows} {pageSize} let:rows={rows2}>
+	<thead slot="head">
+		<tr>
+			<td>Name</td>
+			<td>Age</td>
+		</tr>
+	</thead>
+	<tbody>
+		{#each rows2 as row, index (row)}
+			<Row {index} on:click={() => cellOnClick(row)}>
+				<td>{row.name}</td>
+				<td>{row.age}</td>
+			</Row>
+		{/each}
+	</tbody>
+</Table>
 ```
 
-Your component's source code lives in `src/index.svelte`.
-
-TODO
-
-* [ ] some firm opinions about the best way to test components
-* [ ] update `degit` so that it automates some of the setup work
-
-
-## Setting up
-
-* Run `npm init` (or `yarn init`)
-* Replace this README with your own
-
-
-## Consuming components
-
-Your package.json has a `"svelte"` field pointing to `src/index.svelte`, which allows Svelte apps to import the source code directly, if they are using a bundler plugin like [rollup-plugin-svelte](https://github.com/rollup/rollup-plugin-svelte) or [svelte-loader](https://github.com/sveltejs/svelte-loader) (where [`resolve.mainFields`](https://webpack.js.org/configuration/resolve/#resolve-mainfields) in your webpack config includes `"svelte"`). **This is recommended.**
-
-For everyone else, `npm run build` will bundle your component's source code into a plain JavaScript module (`index.mjs`) and a UMD script (`index.js`). This will happen automatically when you publish your component to npm, courtesy of the `prepublishOnly` hook in package.json.
+## Advanced
+* You can add components to the top or bottom slots.
+* Adding top slot will override the default content (Search component) but you can still use it adding the Search component inside your custom slot.
+* You can change the default search method by adding an on:search event on Search component.
+* Row component is optional and only serves to render odd/even row, you can use <tr> instead.
