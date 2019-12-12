@@ -1,6 +1,6 @@
 # Svelte-table
 
-the purpose of this component is to be a reausable html table wrapper without needing to coding too much javascript.
+a simple way to render your tables, the purpose of this component is to be a reausable html table wrapper without needing to coding too much javascript.
 
 `npm install @fabiohvp/svelte-table`  
 or  
@@ -16,10 +16,12 @@ or
 
 [Full code sample (including source)](https://svelte.dev/repl/3238e5737f764431a26e243800dccc6d?version=3.16.4)
 
-## Usage
+## Sample
 
 ```
 <script>
+	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
+	//Sort component is optional
   import Table, { Row, Sort } from "./Table.svelte";
 
   let rows = [

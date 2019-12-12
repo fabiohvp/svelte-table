@@ -21,8 +21,8 @@
     "index.mjs",
     "index.js"
   ],
-  "description": "*Psst — looking for an app template? Go here --> [sveltejs/template](https://github.com/sveltejs/template)*",
-  "version": "0.0.3",
+  "description": "Svelte-table - a simple way to render your tables",
+  "version": "0.0.4",
   "dependencies": {},
   "repository": {
     "type": "git",
