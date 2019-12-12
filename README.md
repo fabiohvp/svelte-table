@@ -20,9 +20,8 @@ or
 
 ```
 <script>
-	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
-	//Sort component is optional
-  import Table, { Row, Sort } from "./Table.svelte";
+  //Row component is optional and only serves to render odd/even row, you can use <tr> instead.
+  import Table, { Row } from "./Table.svelte";
 
   let rows = [
     { name: "a", lastName: "o", age: 12 },
@@ -38,37 +37,14 @@ or
   function cellOnClick(row) {
     alert(JSON.stringify(row));
   }
-
-  function onSortString({ detail: { dir, key } }) {
-    rows = [...rows].sort((a, b) =>
-      dir === "asc"
-        ? ("" + a[key]).localeCompare(b[key])
-        : ("" + b[key]).localeCompare(a[key])
-    );
-  }
-
-  function onSortNumber({ detail: { dir, key } }) {
-    rows = [...rows].sort((a, b) =>
-      dir === "asc" ? a[key] - b[key] : b[key] - a[key]
-    );
-  }
 </script>
 
 <Table bind:page {rows} {pageSize} let:rows={rows2}>
   <thead slot="head">
     <tr>
-      <td>
-        Name
-        <Sort key="name" on:sort={onSortString} />
-      </td>
-      <td>
-        Lastname
-        <Sort key="lastName" on:sort={onSortString} />
-      </td>
-      <td>
-        Age
-        <Sort key="age" on:sort={onSortNumber} />
-      </td>
+      <td>Name</td>
+      <td>Lastname</td>
+      <td>Age</td>
     </tr>
   </thead>
   <tbody>

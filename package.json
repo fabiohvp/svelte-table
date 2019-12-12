@@ -23,7 +23,7 @@
     "index.js"
   ],
   "description": "Svelte-table - a simple way to render your tables",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "dependencies": {},
   "repository": {
     "type": "git",

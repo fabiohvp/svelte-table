@@ -3,8 +3,11 @@
   const dispatch = createEventDispatcher();
 
   export let page;
-  export let pageCount;
+  export let count;
+  export let pageSize;
   export let buttons = [-2, -1, 0, 1, 2];
+
+  $: pageCount = Math.floor(count / pageSize);
 
   export let labels = {
     first: "First",

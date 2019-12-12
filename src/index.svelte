@@ -7,9 +7,14 @@
 </script>
 
 <script>
+  export let loading = false;
   export let page = 0;
   export let pageSize = 10;
   export let rows;
+  export let labels = {
+    empty: "No records available",
+    loading: "Loading data"
+  };
 
   let filteredRows;
   let visibleRows;
@@ -22,7 +27,6 @@
     currentFirstItemIndex,
     currentFirstItemIndex + pageSize
   );
-  $: pageCount = Math.floor((filteredRows.length - 1) / pageSize);
 
   function onPageChange(event) {
     page = event.detail;
@@ -40,6 +44,7 @@
 
   function filter(row, text) {
     text = text.toLowerCase();
+
     for (let i in row) {
       if (
         row[i]
@@ -69,12 +74,12 @@
     padding: 0.3em 0.3em;
   }
 
-  .empty-message {
+  .center {
     text-align: center;
     font-style: italic;
   }
 
-  .empty-message > span {
+  .center > span {
     padding: 10px 10px;
     float: left;
     width: 100%;
@@ -90,13 +95,20 @@
 <div>
   <table class={'table ' + $$props.class}>
     <slot name="head" />
-    <slot rows={visibleRows} />
-    {#if visibleRows.length === 0}
+    {#if loading}
       <tr>
-        <td class="empty-message" colspan="100%">
-          <span>Não há registros disponíveis</span>
+        <td class="center" colspan="100%">
+          <span>{labels.loading}</span>
         </td>
       </tr>
+    {:else if visibleRows.length === 0}
+      <tr>
+        <td class="center" colspan="100%">
+          <span>{labels.empty}</span>
+        </td>
+      </tr>
+    {:else}
+      <slot rows={visibleRows} />
     {/if}
     <slot name="foot" />
   </table>
@@ -104,6 +116,10 @@
 
 <div>
   <slot name="bottom">
-    <Pagination {page} {pageCount} on:change={onPageChange} />
+    <Pagination
+      {page}
+      {pageSize}
+      count={filteredRows.length - 1}
+      on:change={onPageChange} />
   </slot>
 </div>
