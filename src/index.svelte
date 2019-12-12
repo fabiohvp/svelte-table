@@ -1,7 +1,8 @@
 <script context="module">
+  import Pagination from "./Pagination.svelte";
   import Row from "./Row.svelte";
   import Search from "./Search.svelte";
-  export { Row, Search };
+  export { Pagination, Row, Search };
 </script>
 
 <script>
@@ -21,6 +22,10 @@
     currentFirstItemIndex + pageSize
   );
   $: pages = Math.floor((filteredRows.length - 1) / pageSize);
+
+  function onPageChange(event) {
+    page = event.detail;
+  }
 
   function onSearch(event) {
     page = 0;
@@ -50,39 +55,16 @@
 </script>
 
 <style>
-  div {
-    width: 100%;
-    float: left;
-  }
-
-  ul {
-    flex: 1;
-    float: right;
-    list-style: none;
-  }
-
-  li {
-    float: left;
-  }
-
-  button {
-    padding: 5px 10px;
-    margin-left: 3px;
-    float: left;
-    cursor: pointer;
-  }
-
-  .active {
-    background-color: rgb(150, 150, 235);
-    color: white;
-  }
-
-  table {
+  .table {
     width: 100%;
     border-collapse: collapse;
   }
 
-  :global(table td) {
+  .table :global(th, td) {
+    position: relative;
+  }
+
+  .table :global(td) {
     padding: 0.3em 0.3em;
   }
 
@@ -105,7 +87,7 @@
 </div>
 
 <div>
-  <table class={$$props.class}>
+  <table class={'table ' + $$props.class}>
     <slot name="head" />
     <slot rows={visibleRows} />
     {#if visibleRows.length === 0}
@@ -119,37 +101,7 @@
   </table>
 </div>
 <div>
-  <ul>
-    <li>
-      <button disabled={page === 0} on:click={() => (page = 0)}>
-        Primeira
-      </button>
-    </li>
-    <li>
-      <button disabled={page === 0} on:click={() => page--}>Anterior</button>
-    </li>
-    {#each buttons as button}
-      {#if page + button >= 0 && page + button <= pages}
-        <li>
-          <button
-            class:active={page === page + button}
-            on:click={() => (page = page + button)}>
-            {page + button + 1}
-          </button>
-        </li>
-      {/if}
-    {/each}
-    <li>
-      <button disabled={page > pages - 1} on:click={() => page++}>
-        Próxima
-      </button>
-    </li>
-    <li>
-      <button disabled={page >= pages} on:click={() => (page = pages)}>
-        Última
-      </button>
-    </li>
-  </ul>
+  <Pagination {page} {pages} on:change={onPageChange} />
 </div>
 
 <div>
