@@ -2,7 +2,8 @@
   import Pagination from "./Pagination.svelte";
   import Row from "./Row.svelte";
   import Search from "./Search.svelte";
-  export { Pagination, Row, Search };
+  import Sort from "./Sort.svelte";
+  export { Pagination, Row, Search, Sort };
 </script>
 
 <script>
@@ -12,7 +13,7 @@
 
   let filteredRows;
   let visibleRows;
-  let pages = 0;
+  let pageCount = 0;
   let buttons = [-2, -1, 0, 1, 2];
 
   $: filteredRows = rows;
@@ -21,7 +22,7 @@
     currentFirstItemIndex,
     currentFirstItemIndex + pageSize
   );
-  $: pages = Math.floor((filteredRows.length - 1) / pageSize);
+  $: pageCount = Math.floor((filteredRows.length - 1) / pageSize);
 
   function onPageChange(event) {
     page = event.detail;
@@ -100,10 +101,9 @@
     <slot name="foot" />
   </table>
 </div>
-<div>
-  <Pagination {page} {pages} on:change={onPageChange} />
-</div>
 
 <div>
-  <slot name="bottom" />
+  <slot name="bottom">
+    <Pagination {page} {pageCount} on:change={onPageChange} />
+  </slot>
 </div>

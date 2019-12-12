@@ -2,8 +2,8 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  export let dir;
-  export let name;
+  export let dir = "none";
+  export let key;
   export let labels = {
     asc: "Ascending",
     desc: "Desceding",
@@ -11,13 +11,13 @@
   };
 
   function onClick(e) {
-    const detail = { originalEvent: e, name, dir: "asc" };
+    const detail = { originalEvent: e, key, dir: "asc" };
 
-    if (!dir || dir === "asc") {
+    if (dir !== "desc") {
       detail.dir = "desc";
     }
 
-    dispatch("click", detail);
+    dispatch("sort", detail);
 
     if (detail.returnValue !== false) {
       dir = detail.dir;

@@ -3,7 +3,7 @@
   const dispatch = createEventDispatcher();
 
   export let page;
-  export let pages;
+  export let pageCount;
   export let buttons = [-2, -1, 0, 1, 2];
 
   export let labels = {
@@ -54,7 +54,7 @@
     </button>
   </li>
   {#each buttons as button}
-    {#if page + button >= 0 && page + button <= pages}
+    {#if page + button >= 0 && page + button <= pageCount}
       <li>
         <button
           class:active={page === page + button}
@@ -65,12 +65,12 @@
     {/if}
   {/each}
   <li>
-    <button disabled={page > pages - 1} on:click={() => onChange(page + 1)}>
+    <button disabled={page > pageCount - 1} on:click={() => onChange(page + 1)}>
       {labels.next}
     </button>
   </li>
   <li>
-    <button disabled={page >= pages} on:click={() => onChange(pages)}>
+    <button disabled={page >= pageCount} on:click={() => onChange(pageCount)}>
       {labels.last}
     </button>
   </li>
