@@ -48,6 +48,6 @@ or
 * You can add components to the top or bottom slots.
 * Adding top slot will override the default content (Search component) but you can still use it adding the Search component inside your custom slot.
 * You can change the default search method by adding an on:search event on Search component.
-* Row component is optional and only serves to render odd/even row, you can use <tr> instead.
+* Row component is optional and only serves to render odd/even row, you can use &lt;tr> instead.
 
 [Full code sample](https://svelte.dev/repl/3238e5737f764431a26e243800dccc6d?version=3.12.1)
