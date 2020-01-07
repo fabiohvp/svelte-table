@@ -1,15 +1,21 @@
 <script context="module">
-  import Pagination from "./Pagination.svelte";
+  import Pagination, {
+    setLabels as _setPaginationLabels
+  } from "./Pagination.svelte";
   import Row from "./Row.svelte";
-  import Search from "./Search.svelte";
-  import Sort from "./Sort.svelte";
+  import Search, { setLabels as _setSearchLabels } from "./Search.svelte";
+  import Sort, { setLabels as _setSortLabels } from "./Sort.svelte";
   export { Pagination, Row, Search, Sort };
 
   let globalLabels;
 
-  export function setLabels(labels) {
+  export function setTableLabels(labels) {
     globalLabels = labels;
   }
+
+  export const setPaginationLabels = _setPaginationLabels;
+  export const setSearchLabels = _setSearchLabels;
+  export const setSortLabels = _setSortLabels;
 </script>
 
 <script>
