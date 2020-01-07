@@ -30,26 +30,26 @@
 <Table {page} {pageSize} {rows} let:rows={rows2}>
   <thead slot="head">
     <tr>
-      <td>
+      <th>
         Name
         <Sort key="name" on:sort={onSortString} />
-      </td>
-      <td>
+      </th>
+      <th>
         Lastname
         <Sort key="lastName" on:sort={onSortString} />
-      </td>
-      <td>
+      </th>
+      <th>
         Age
         <Sort key="age" on:sort={onSortNumber} />
-      </td>
+      </th>
     </tr>
   </thead>
   <tbody>
     {#each rows2 as row, index (row)}
       <Row {index} on:click={() => onCellClick(row)}>
-        <td>{row.name}</td>
-        <td>{row.lastName}</td>
-        <td>{row.age}</td>
+        <td data-label="Name">{row.name}</td>
+        <td data-label="Lastname">{row.lastName}</td>
+        <td data-label="Age">{row.age}</td>
       </Row>
     {/each}
   </tbody>
