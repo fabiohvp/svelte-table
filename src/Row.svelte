@@ -11,7 +11,7 @@
 
 <style>
   .odd {
-    background-color: #eee;
+    background-color: #f7f7f7;
   }
 </style>
 
