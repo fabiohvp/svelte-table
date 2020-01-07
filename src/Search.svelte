@@ -1,3 +1,11 @@
+<script context="module">
+  let globalLabels;
+
+  export function setLabels(labels) {
+    globalLabels = labels;
+  }
+</script>
+
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
@@ -5,7 +13,8 @@
   export let text = "";
 
   export let labels = {
-    placeholder: "Search"
+    placeholder: "Search",
+    ...globalLabels
   };
 
   function onSearch() {

@@ -1,3 +1,11 @@
+<script context="module">
+  let globalLabels;
+
+  export function setLabels(labels) {
+    globalLabels = labels;
+  }
+</script>
+
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
@@ -11,7 +19,8 @@
     first: "First",
     last: "Last",
     next: "Next",
-    previous: "Previous"
+    previous: "Previous",
+    ...globalLabels
   };
 
   $: pageCount = Math.floor(count / pageSize);

@@ -1,3 +1,11 @@
+<script context="module">
+  let globalLabels;
+
+  export function setLabels(labels) {
+    globalLabels = labels;
+  }
+</script>
+
 <script>
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
@@ -7,7 +15,8 @@
   export let labels = {
     asc: { title: "Ascending", html: "&#8593;" },
     desc: { title: "Desceding", html: "&#8595;" },
-    unsorted: { title: "Unsorted", html: "&#8645;" }
+    unsorted: { title: "Unsorted", html: "&#8645;" },
+    ...globalLabels
   };
 
   function onClick(e) {

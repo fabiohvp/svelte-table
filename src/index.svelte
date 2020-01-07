@@ -4,6 +4,12 @@
   import Search from "./Search.svelte";
   import Sort from "./Sort.svelte";
   export { Pagination, Row, Search, Sort };
+
+  let globalLabels;
+
+  export function setLabels(labels) {
+    globalLabels = labels;
+  }
 </script>
 
 <script>
@@ -13,7 +19,8 @@
   export let rows;
   export let labels = {
     empty: "No records available",
-    loading: "Loading data"
+    loading: "Loading data",
+    ...globalLabels
   };
 
   let filteredRows;
