@@ -111,13 +111,17 @@
     {#if loading}
       <tr>
         <td class="center" colspan="100%">
-          <span>{labels.loading}</span>
+          <span>
+            {@html labels.loading}
+          </span>
         </td>
       </tr>
     {:else if visibleRows.length === 0}
       <tr>
         <td class="center" colspan="100%">
-          <span>{labels.empty}</span>
+          <span>
+            {@html labels.empty}
+          </span>
         </td>
       </tr>
     {:else}
