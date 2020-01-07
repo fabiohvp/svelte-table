@@ -16,6 +16,15 @@
   }
   .search input {
     width: 100%;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    padding: 1px 3px;
+  }
+
+  @media screen and (max-width: 767px) {
+    .search {
+      width: 100%;
+    }
   }
 </style>
 
