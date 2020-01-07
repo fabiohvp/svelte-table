@@ -4,6 +4,10 @@
 
   export let text = "";
 
+  export let labels = {
+    placeholder: "Search"
+  };
+
   function onSearch() {
     dispatch("search", text);
   }
@@ -31,7 +35,8 @@
 <div class="search">
   <input
     type="search"
-    placeholder="Search"
+    title={labels.placeholder}
+    placeholder={labels.placeholder}
     bind:value={text}
     on:keyup={onSearch} />
 </div>

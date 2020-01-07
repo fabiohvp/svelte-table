@@ -5,9 +5,9 @@
   export let dir = "none";
   export let key;
   export let labels = {
-    asc: "Ascending",
-    desc: "Desceding",
-    none: "Not sorted"
+    asc: { title: "Ascending", html: "&#8593;" },
+    desc: { title: "Desceding", html: "&#8595;" },
+    unsorted: { title: "Unsorted", html: "&#8645;" }
   };
 
   function onClick(e) {
@@ -37,10 +37,16 @@
 
 <span class="sort" on:click={onClick}>
   {#if dir === 'asc'}
-    <span title={labels.asc}>&#8593;</span>
+    <span title={labels.asc.title}>
+      {@html labels.asc.html}
+    </span>
   {:else if dir === 'desc'}
-    <span title={labels.desc}>&#8595;</span>
+    <span title={labels.desc.title}>
+      {@html labels.asc.html}
+    </span>
   {:else}
-    <span title={labels.none}>&#8645;</span>
+    <span title={labels.unsorted.title}>
+      {@html labels.unsorted.html}
+    </span>
   {/if}
 </span>

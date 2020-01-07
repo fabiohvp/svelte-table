@@ -7,14 +7,14 @@
   export let pageSize;
   export let buttons = [-2, -1, 0, 1, 2];
 
-  $: pageCount = Math.floor(count / pageSize);
-
   export let labels = {
     first: "First",
     last: "Last",
     next: "Next",
     previous: "Previous"
   };
+
+  $: pageCount = Math.floor(count / pageSize);
 
   function onChange(page) {
     dispatch("change", page);
