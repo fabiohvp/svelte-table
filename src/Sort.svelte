@@ -42,7 +42,7 @@
     </span>
   {:else if dir === 'desc'}
     <span title={labels.desc.title}>
-      {@html labels.asc.html}
+      {@html labels.desc.html}
     </span>
   {:else}
     <span title={labels.unsorted.title}>
