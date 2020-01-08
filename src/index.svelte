@@ -99,11 +99,11 @@
   }
 </style>
 
-<div>
-  <slot name="top">
+<slot name="top">
+  <div style="float:left;width:100%;margin-bottom: 1em;">
     <Search on:search={onSearch} />
-  </slot>
-</div>
+  </div>
+</slot>
 
 <div>
   <table class={'table ' + $$props.class}>
@@ -131,12 +131,12 @@
   </table>
 </div>
 
-<div>
-  <slot name="bottom">
+<slot name="bottom">
+  <div style="float:left;width:100%;margin-top: 1em;">
     <Pagination
       {page}
       {pageSize}
       count={filteredRows.length - 1}
       on:change={onPageChange} />
-  </slot>
-</div>
+  </div>
+</slot>

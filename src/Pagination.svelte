@@ -47,6 +47,8 @@
   }
 
   button {
+    background: transparent;
+    border: 1px solid #ccc;
     padding: 5px 10px;
     margin-left: 3px;
     float: left;
