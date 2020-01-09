@@ -10,7 +10,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  export let page;
+  export let page = 0;
   export let count;
   export let pageSize;
   export let buttons = [-2, -1, 0, 1, 2];

@@ -105,31 +105,29 @@
   </div>
 </slot>
 
-<div>
-  <table class={'table ' + $$props.class}>
-    <slot name="head" />
-    {#if loading}
-      <tr>
-        <td class="center" colspan="100%">
-          <span>
-            {@html labels.loading}
-          </span>
-        </td>
-      </tr>
-    {:else if visibleRows.length === 0}
-      <tr>
-        <td class="center" colspan="100%">
-          <span>
-            {@html labels.empty}
-          </span>
-        </td>
-      </tr>
-    {:else}
-      <slot rows={visibleRows} />
-    {/if}
-    <slot name="foot" />
-  </table>
-</div>
+<table class={'table ' + $$props.class}>
+  <slot name="head" />
+  {#if loading}
+    <tr>
+      <td class="center" colspan="100%">
+        <span>
+          {@html labels.loading}
+        </span>
+      </td>
+    </tr>
+  {:else if visibleRows.length === 0}
+    <tr>
+      <td class="center" colspan="100%">
+        <span>
+          {@html labels.empty}
+        </span>
+      </td>
+    </tr>
+  {:else}
+    <slot rows={visibleRows} />
+  {/if}
+  <slot name="foot" />
+</table>
 
 <slot name="bottom">
   <div style="float:left;width:100%;margin-top: 1em;">
