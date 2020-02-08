@@ -22,6 +22,7 @@
   export let loading = false;
   export let page = 0;
   export let pageSize = 10;
+  export let responsive = true;
   export let rows;
   export let labels = {
     empty: "No records available",
@@ -97,6 +98,58 @@
     float: left;
     width: 100%;
   }
+
+  @media screen and (max-width: 767px) {
+  table.responsive {
+    border: 0;
+  }
+
+  table.responsive :global(thead) {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table.responsive :global(tr) {
+    border-bottom: 2px solid #ddd;
+    display: block;
+    padding-bottom: 0.3em;
+    margin-bottom: 0.3em;
+  }
+
+  table.responsive :global(td) {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  table.responsive :global(td::before) {
+    /*
+	* aria-label has no advantage, it won't be read inside a table content: attr(aria-label);
+	*/
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+  }
+
+  table.responsive :global(td[data-label-normal]::before) {
+    font-weight: normal;
+  }
+
+  table.responsive :global(td[data-label-upper]::before) {
+    text-transform: uppercase;
+  }
+
+  table.responsive :global(td:last-child) {
+    border-bottom: 0;
+  }
+}
 </style>
 
 <slot name="top">
@@ -105,24 +158,28 @@
   </div>
 </slot>
 
-<table class={'table ' + $$props.class}>
+<table class={'table ' + $$props.class} class:responsive={responsive}>
   <slot name="head" />
   {#if loading}
-    <tr>
-      <td class="center" colspan="100%">
-        <span>
-          {@html labels.loading}
-        </span>
-      </td>
-    </tr>
+	<tbody>
+      <tr>
+		<td class="center" colspan="100%">
+			<span>
+			{@html labels.loading}
+			</span>
+		</td>
+      </tr>
+	</tbody>
   {:else if visibleRows.length === 0}
-    <tr>
-      <td class="center" colspan="100%">
-        <span>
-          {@html labels.empty}
-        </span>
-      </td>
-    </tr>
+	<tbody>
+      <tr>
+		<td class="center" colspan="100%">
+			<span>
+			{@html labels.empty}
+			</span>
+		</td>
+      </tr>
+	</tbody>
   {:else}
     <slot rows={visibleRows} />
   {/if}
