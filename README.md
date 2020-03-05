@@ -21,7 +21,7 @@ or
 ```
 <script>
   //Row component is optional and only serves to render odd/even row, you can use <tr> instead.
-  import Table, { Row } from "./Table.svelte";
+  import Table, { Row } from "@fabiohvp/svelte-table";
 
   let rows = [
     { name: "a", lastName: "o", age: 12 },
