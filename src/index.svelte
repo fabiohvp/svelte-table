@@ -19,6 +19,13 @@
 </script>
 
 <script>
+  
+  export let searchStyle = '';
+  // theming variables:
+  export let searchFloat = 'left';
+  export let searchWidth = '100%';
+  export let searchMarginBottom = '1em';
+
   export let loading = false;
   export let page = 0;
   export let pageSize = 10;
@@ -61,8 +68,7 @@
 
     for (let i in row) {
       if (
-        row[i]
-          .toString()
+        String(row[i])
           .toLowerCase()
           .indexOf(text) > -1
       ) {
@@ -72,6 +78,13 @@
 
     return false;
   }
+
+  $: searchStyle = `
+    --float:${searchFloat};
+    --width:${searchWidth};
+    --margin-bottom: ${searchMarginBottom};
+    ${style}
+  `;
 </script>
 
 <style>
@@ -153,7 +166,7 @@
 </style>
 
 <slot name="top">
-  <div style="float:left;width:100%;margin-bottom: 1em;">
+  <div style={searchStyle}>
     <Search on:search={onSearch} />
   </div>
 </slot>
