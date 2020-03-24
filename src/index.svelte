@@ -19,36 +19,39 @@
 </script>
 
 <script>
-  
+  import { setContext } from "svelte";
+
   export let searchStyle = '';
   // theming variables:
   export let searchFloat = 'left';
   export let searchWidth = '100%';
   export let searchMarginBottom = '1em';
   export let style = '';
-  
+  export let rows;
   export let loading = false;
   export let page = 0;
   export let pageSize = 10;
   export let responsive = true;
-  export let rows;
+  export let alteredRows;
   export let labels = {
     empty: "No records available",
     loading: "Loading data",
     ...globalLabels
   };
-
+  setContext("filteredRows", {getRows:()=>filteredRows});
+  
   let filteredRows;
   let visibleRows;
   let pageCount = 0;
   let buttons = [-2, -1, 0, 1, 2];
 
-  $: filteredRows = rows;
+  $: filteredRows = alteredRows;
   $: currentFirstItemIndex = page * pageSize;
   $: visibleRows = filteredRows.slice(
     currentFirstItemIndex,
     currentFirstItemIndex + pageSize
   );
+
 
   function onPageChange(event) {
     page = event.detail;
@@ -58,9 +61,9 @@
     page = 0;
 
     if (event.detail.length === 0) {
-      filteredRows = rows;
+      alteredRows = rows;
     } else {
-      filteredRows = rows.filter(r => filter(r, event.detail));
+      filteredRows = alteredRows.filter(r => filter(r, event.detail));
     }
   }
 
@@ -195,7 +198,7 @@
       </tr>
 	</tbody>
   {:else}
-    <slot rows={visibleRows} />
+    <slot alteredRows={visibleRows} />
   {/if}
   <slot name="foot" />
 </table>

@@ -7,7 +7,7 @@
 </script>
 
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   const dispatch = createEventDispatcher();
 
   export let dir = "none";
@@ -20,14 +20,15 @@
   };
 
   function onClick(e) {
-    const detail = { originalEvent: e, key, dir: "asc" };
+    const {getRows} = getContext("filteredRows");
+    const detail = { originalEvent: e, key, dir: "asc", rows: getRows() };
 
     if (dir !== "desc") {
       detail.dir = "desc";
     }
 
     dispatch("sort", detail);
-
+    
     if (detail.returnValue !== false) {
       dir = detail.dir;
     }
