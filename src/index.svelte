@@ -25,7 +25,8 @@
   export let searchFloat = 'left';
   export let searchWidth = '100%';
   export let searchMarginBottom = '1em';
-
+  export let style = '';
+  
   export let loading = false;
   export let page = 0;
   export let pageSize = 10;
