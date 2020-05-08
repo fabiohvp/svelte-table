@@ -100,86 +100,86 @@
   }
 
   @media screen and (max-width: 767px) {
-  table.responsive {
-    border: 0;
-  }
+    table.responsive {
+      border: 0;
+    }
 
-  table.responsive :global(thead) {
-    border: none;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
+    table.responsive :global(thead) {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
 
-  table.responsive :global(tr) {
-    border-bottom: 2px solid #ddd;
-    display: block;
-    padding-bottom: 0.3em;
-    margin-bottom: 0.3em;
-  }
+    table.responsive :global(tr) {
+      border-bottom: 2px solid #ddd;
+      display: block;
+      padding-bottom: 0.3em;
+      margin-bottom: 0.3em;
+    }
 
-  table.responsive :global(td) {
-    border-bottom: 1px solid #ddd;
-    display: block;
-    font-size: 0.8em;
-    text-align: right;
-  }
+    table.responsive :global(td) {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: 0.8em;
+      text-align: right;
+    }
 
-  table.responsive :global(td::before) {
-    /*
+    table.responsive :global(td::before) {
+      /*
 	* aria-label has no advantage, it won't be read inside a table content: attr(aria-label);
 	*/
-    content: attr(data-label);
-    float: left;
-    font-weight: bold;
-  }
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+    }
 
-  table.responsive :global(td[data-label-normal]::before) {
-    font-weight: normal;
-  }
+    table.responsive :global(td[data-label-normal]::before) {
+      font-weight: normal;
+    }
 
-  table.responsive :global(td[data-label-upper]::before) {
-    text-transform: uppercase;
-  }
+    table.responsive :global(td[data-label-upper]::before) {
+      text-transform: uppercase;
+    }
 
-  table.responsive :global(td:last-child) {
-    border-bottom: 0;
+    table.responsive :global(td:last-child) {
+      border-bottom: 0;
+    }
   }
-}
 </style>
 
 <slot name="top">
   <div style="float:left;width:100%;margin-bottom: 1em;">
-    <Search on:search={onSearch} />
+    <svelte:component this={Search} on:search={onSearch} />
   </div>
 </slot>
 
-<table class={'table ' + $$props.class} class:responsive={responsive}>
+<table class={'table ' + $$props.class} class:responsive>
   <slot name="head" />
   {#if loading}
-	<tbody>
+    <tbody>
       <tr>
-		<td class="center" colspan="100%">
-			<span>
-			{@html labels.loading}
-			</span>
-		</td>
+        <td class="center" colspan="100%">
+          <span>
+            {@html labels.loading}
+          </span>
+        </td>
       </tr>
-	</tbody>
+    </tbody>
   {:else if visibleRows.length === 0}
-	<tbody>
+    <tbody>
       <tr>
-		<td class="center" colspan="100%">
-			<span>
-			{@html labels.empty}
-			</span>
-		</td>
+        <td class="center" colspan="100%">
+          <span>
+            {@html labels.empty}
+          </span>
+        </td>
       </tr>
-	</tbody>
+    </tbody>
   {:else}
     <slot rows={visibleRows} />
   {/if}
@@ -188,7 +188,8 @@
 
 <slot name="bottom">
   <div style="float:left;width:100%;margin-top: 1em;">
-    <Pagination
+    <svelte:component
+      this={Pagination}
       {page}
       {pageSize}
       count={filteredRows.length - 1}
