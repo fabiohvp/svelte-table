@@ -25,8 +25,8 @@
 
   $: pageCount = Math.floor(count / pageSize);
 
-  function onChange(page) {
-    dispatch("change", page);
+  function onChange(e, page) {
+    dispatch("pageChange", { originalEvent: e, page });
   }
 </script>
 
@@ -58,12 +58,12 @@
 
 <ul>
   <li>
-    <button disabled={page === 0} on:click={() => onChange(0)}>
+    <button disabled={page === 0} on:click={e => onChange(e, 0)}>
       {labels.first}
     </button>
   </li>
   <li>
-    <button disabled={page === 0} on:click={() => onChange(page - 1)}>
+    <button disabled={page === 0} on:click={e => onChange(e, page - 1)}>
       {labels.previous}
     </button>
   </li>
@@ -72,19 +72,21 @@
       <li>
         <button
           class:active={page === page + button}
-          on:click={() => onChange(page + button)}>
+          on:click={e => onChange(e, page + button)}>
           {page + button + 1}
         </button>
       </li>
     {/if}
   {/each}
   <li>
-    <button disabled={page > pageCount - 1} on:click={() => onChange(page + 1)}>
+    <button
+      disabled={page > pageCount - 1}
+      on:click={e => onChange(e, page + 1)}>
       {labels.next}
     </button>
   </li>
   <li>
-    <button disabled={page >= pageCount} on:click={() => onChange(pageCount)}>
+    <button disabled={page >= pageCount} on:click={e => onChange(e, pageCount)}>
       {labels.last}
     </button>
   </li>

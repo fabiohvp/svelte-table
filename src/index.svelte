@@ -22,6 +22,20 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  export let filter = (row, text) => {
+    text = text.toLowerCase();
+    for (let i in row) {
+      if (
+        row[i]
+          .toString()
+          .toLowerCase()
+          .indexOf(text) > -1
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
   export let loading = false;
   export let page = 0;
   export let pageSize = 10;
@@ -46,12 +60,15 @@
   );
 
   function onPageChange(event) {
-    page = event.detail;
+    dispatch("pageChange", event.detail);
+    if (event.detail.preventDefault !== true) {
+      page = event.detail.page;
+    }
   }
 
   function onSearch(event) {
     dispatch("search", event.detail);
-    if (event.detail.preventDefault !== false) {
+    if (event.detail.preventDefault !== true) {
       page = 0;
 
       if (event.detail.text.length === 0) {
@@ -60,23 +77,6 @@
         filteredRows = rows.filter(r => filter(r, event.detail.text));
       }
     }
-  }
-
-  function filter(row, text) {
-    text = text.toLowerCase();
-
-    for (let i in row) {
-      if (
-        row[i]
-          .toString()
-          .toLowerCase()
-          .indexOf(text) > -1
-      ) {
-        return true;
-      }
-    }
-
-    return false;
   }
 </script>
 
@@ -199,6 +199,6 @@
       {page}
       {pageSize}
       count={filteredRows.length - 1}
-      on:change={onPageChange} />
+      on:pageChange={onPageChange} />
   </div>
 </slot>
