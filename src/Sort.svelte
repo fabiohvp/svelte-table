@@ -28,7 +28,7 @@
 
     dispatch("sort", detail);
 
-    if (detail.returnValue !== false) {
+    if (detail.preventDefault !== false) {
       dir = detail.dir;
     }
   }

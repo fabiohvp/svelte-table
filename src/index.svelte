@@ -19,6 +19,9 @@
 </script>
 
 <script>
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
   export let loading = false;
   export let page = 0;
   export let pageSize = 10;
@@ -47,12 +50,15 @@
   }
 
   function onSearch(event) {
-    page = 0;
+    dispatch("search", event.detail);
+    if (event.detail.preventDefault !== false) {
+      page = 0;
 
-    if (event.detail.length === 0) {
-      filteredRows = rows;
-    } else {
-      filteredRows = rows.filter(r => filter(r, event.detail));
+      if (event.detail.text.length === 0) {
+        filteredRows = rows;
+      } else {
+        filteredRows = rows.filter(r => filter(r, event.detail.text));
+      }
     }
   }
 

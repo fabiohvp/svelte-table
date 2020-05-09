@@ -17,8 +17,8 @@
     ...globalLabels
   };
 
-  function onSearch() {
-    dispatch("search", text);
+  function onSearch(e) {
+    dispatch("search", { originalEvent: e, text });
   }
 </script>
 
