@@ -7,13 +7,15 @@
 </script>
 
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   const dispatch = createEventDispatcher();
+  const stateContext = getContext("state");
 
-  export let page = 0;
-  export let count;
-  export let pageSize;
   export let buttons = [-2, -1, 0, 1, 2];
+  export let count;
+  export let page = 0;
+  export let pageSize;
+  export let serverSide = false;
 
   export let labels = {
     first: "First",
@@ -25,8 +27,19 @@
 
   $: pageCount = Math.floor(count / pageSize);
 
-  function onChange(e, page) {
-    dispatch("pageChange", { originalEvent: e, page });
+  function onChange(event, page) {
+    const state = stateContext.getState();
+    const detail = {
+      originalEvent: event,
+      page,
+      pageIndex: serverSide ? 0 : page * state.pageSize,
+      pageSize: state.pageSize
+    };
+    dispatch("pageChange", detail);
+
+    if (detail.preventDefault !== true) {
+      stateContext.setPage(detail.page, detail.pageIndex);
+    }
   }
 </script>
 

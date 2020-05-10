@@ -7,8 +7,9 @@
 </script>
 
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, getContext } from "svelte";
   const dispatch = createEventDispatcher();
+  const stateContext = getContext("state");
 
   export let dir = "none";
   export let key;
@@ -19,18 +20,23 @@
     ...globalLabels
   };
 
-  function onClick(e) {
-    const detail = { originalEvent: e, key, dir: "asc" };
+  function onClick(event) {
+    const state = stateContext.getState();
+    let rows;
 
-    if (dir !== "desc") {
-      detail.dir = "desc";
-    }
+    const detail = {
+      originalEvent: event,
+      key,
+      dir: dir !== "desc" ? "desc" : "asc",
+      rows: state.filteredRows
+    };
 
     dispatch("sort", detail);
 
     if (detail.preventDefault !== true) {
       dir = detail.dir;
     }
+    stateContext.setRows(detail.rows);
   }
 </script>
 

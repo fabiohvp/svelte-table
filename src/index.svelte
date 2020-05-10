@@ -19,64 +19,49 @@
 </script>
 
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, setContext } from "svelte";
   const dispatch = createEventDispatcher();
 
-  export let filter = (row, text) => {
-    text = text.toLowerCase();
-    for (let i in row) {
-      if (
-        row[i]
-          .toString()
-          .toLowerCase()
-          .indexOf(text) > -1
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
   export let loading = false;
   export let page = 0;
+  export let pageIndex = 0;
   export let pageSize = 10;
   export let responsive = true;
   export let rows;
+  export let serverSide = false;
   export let labels = {
     empty: "No records available",
     loading: "Loading data",
     ...globalLabels
   };
 
-  let filteredRows;
-  let visibleRows;
-  let pageCount = 0;
   let buttons = [-2, -1, 0, 1, 2];
+  let pageCount = 0;
 
   $: filteredRows = rows;
-  $: currentFirstItemIndex = page * pageSize;
-  $: visibleRows = filteredRows.slice(
-    currentFirstItemIndex,
-    currentFirstItemIndex + pageSize
-  );
+  $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+
+  setContext("state", {
+    getState: () => ({
+      page,
+      pageIndex,
+      pageSize,
+      rows,
+      filteredRows
+    }),
+    setPage: (_page, _pageIndex) => {
+      page = _page;
+      pageIndex = _pageIndex;
+    },
+    setRows: _rows => (filteredRows = _rows)
+  });
 
   function onPageChange(event) {
     dispatch("pageChange", event.detail);
-    if (event.detail.preventDefault !== true) {
-      page = event.detail.page;
-    }
   }
 
   function onSearch(event) {
     dispatch("search", event.detail);
-    if (event.detail.preventDefault !== true) {
-      page = 0;
-
-      if (event.detail.text.length === 0) {
-        filteredRows = rows;
-      } else {
-        filteredRows = rows.filter(r => filter(r, event.detail.text));
-      }
-    }
   }
 </script>
 
@@ -198,6 +183,7 @@
       this={Pagination}
       {page}
       {pageSize}
+      {serverSide}
       count={filteredRows.length - 1}
       on:pageChange={onPageChange} />
   </div>

@@ -8,6 +8,7 @@
 
   let rows = [];
   let page = 0; //first page
+  let pageIndex = 0; //first row
   let pageSize = 3; //optional, 10 by default
 
   let loading = true;
@@ -22,7 +23,6 @@
   async function load(_page) {
     loading = true;
     const data = await getData(_page, pageSize, text, sorting);
-    page = _page;
     rows = data.rows;
     rowsCount = data.rowsCount;
     loading = false;
@@ -32,24 +32,24 @@
     alert(JSON.stringify(row));
   }
 
-  function onPageChange({ detail: _page }) {
-    load(_page);
+  function onPageChange(event) {
+    load(event.detail.page);
+    page = event.detail.page;
   }
 
   async function onSearch(event) {
-    text = event.detail;
+    text = event.detail.text;
     await load(page);
     page = 0;
   }
 
-  async function onSort({ detail: { dir, key } }) {
-    sorting = { dir, key };
+  async function onSort(event) {
+    sorting = { dir: event.detail.dir, key: event.detail.key };
     await load(page);
-    page = 0;
   }
 </script>
 
-<Table {loading} {rows} let:rows={rows2}>
+<Table {loading} {rows} {pageIndex} {pageSize} let:rows={rows2}>
   <div slot="top">
     <Search on:search={onSearch} />
   </div>
@@ -79,6 +79,11 @@
     {/each}
   </tbody>
   <div slot="bottom">
-    <Pagination {page} {pageSize} count={rowsCount} on:change={onPageChange} />
+    <Pagination
+      {page}
+      {pageSize}
+      count={rowsCount}
+      serverSide={true}
+      on:pageChange={onPageChange} />
   </div>
 </Table>

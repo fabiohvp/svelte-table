@@ -18,12 +18,20 @@
     alert(JSON.stringify(row));
   }
 
-  function onSortString({ detail: { dir, key } }) {
-    rows = sortString(rows, dir, key);
+  function onSortString(event) {
+    event.detail.rows = sortString(
+      event.detail.rows,
+      event.detail.dir,
+      event.detail.key
+    );
   }
 
-  function onSortNumber({ detail: { dir, key } }) {
-    rows = sortNumber(rows, dir, key);
+  function onSortNumber(event) {
+    event.detail.rows = sortString(
+      event.detail.rows,
+      event.detail.dir,
+      event.detail.key
+    );
   }
 </script>
 
