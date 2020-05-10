@@ -15,7 +15,7 @@
     text = text.toLowerCase();
     for (let i in row) {
       if (
-        row[i]
+        (row[i] || "")
           .toString()
           .toLowerCase()
           .indexOf(text) > -1
