@@ -90,6 +90,13 @@
     width: 100%;
   }
 
+  .slot-top,
+  .slot-bottom {
+    float: left;
+    width: 100%;
+    margin-top: 1em;
+  }
+
   @media screen and (max-width: 767px) {
     table.responsive {
       border: 0;
@@ -144,7 +151,7 @@
 </style>
 
 <slot name="top">
-  <div style="float:left;width:100%;margin-bottom: 1em;">
+  <div class="slot-top">
     <svelte:component this={Search} on:search={onSearch} />
   </div>
 </slot>
@@ -178,7 +185,7 @@
 </table>
 
 <slot name="bottom">
-  <div style="float:left;width:100%;margin-top: 1em;">
+  <div class="slot-bottom">
     <svelte:component
       this={Pagination}
       {page}
