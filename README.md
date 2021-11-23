@@ -1,37 +1,60 @@
-*Psst — looking for a more complete solution? Check out [SvelteKit](https://kit.svelte.dev) and its [package command](https://kit.svelte.dev/docs#packaging) which gives you more built-in features like TypeScript transpilation, type definition generation and a built-in playground to test your library.*
+# Svelte-table
 
-*Looking for an app template instead? Go here --> [sveltejs/template](https://github.com/sveltejs/template)*
+a simple way to render your tables, the purpose of this component is to be a reausable html table wrapper without needing to coding too much javascript.
 
----
+`npm install @fabiohvp/svelte-table`  
+or  
+`yarn add @fabiohvp/svelte-table`
 
-# component-template
+## Advanced
 
-A base for building shareable Svelte components. Clone it with [degit](https://github.com/Rich-Harris/degit):
+- You can add components to the top or bottom slots.
+- Adding top/bottom slot will override the default content (Search/Pagination) but you can still use it by importing and adding them inside your custom slot.
+- You can change the default search method by adding an on:search event on Search component.
+- Row component is optional and only serves to render odd/even row, you can use &lt;tr> instead.
+- Sort component expect "key" and you need to implement your own sorting method (see the example below).
 
-```bash
-npx degit sveltejs/component-template my-new-component
-cd my-new-component
-npm install # or yarn
+[Full code sample (including source)](https://svelte.dev/repl/3238e5737f764431a26e243800dccc6d?version=3.16.4)
+
+## Sample
+
 ```
+<script>
+  //Row component is optional and only serves to render odd/even row, you can use <tr> instead.
+  import Table, { Row } from "@fabiohvp/svelte-table";
 
-Your component's source code lives in `src/Component.svelte`.
+  let rows = [
+    { name: "a", lastName: "o", age: 12 },
+    { name: "b", lastName: "n", age: 1 },
+    { name: "c", lastName: "m", age: 13 },
+    { name: "d", lastName: "l", age: 21 },
+    { name: "e", lastName: "k", age: 2 }
+  ];
 
-You can create a package that exports multiple components by adding them to the `src` directory and editing `src/index.js` to reexport them as named exports.
+  let page = 0; //first page
+  let pageSize = 3; //optional, 10 by default
 
-TODO
+  function cellOnClick(row) {
+    alert(JSON.stringify(row));
+  }
+</script>
 
-* [ ] some firm opinions about the best way to test components
-* [ ] update `degit` so that it automates some of the setup work
-
-
-## Setting up
-
-* Run `npm init` (or `yarn init`)
-* Replace this README with your own
-
-
-## Consuming components
-
-Your package.json has a `"svelte"` field pointing to `src/index.js`, which allows Svelte apps to import the source code directly, if they are using a bundler plugin like [rollup-plugin-svelte](https://github.com/sveltejs/rollup-plugin-svelte) or [svelte-loader](https://github.com/sveltejs/svelte-loader) (where [`resolve.mainFields`](https://webpack.js.org/configuration/resolve/#resolve-mainfields) in your webpack config includes `"svelte"`). **This is recommended.**
-
-For everyone else, `npm run build` will bundle your component's source code into a plain JavaScript module (`dist/index.mjs`) and a UMD script (`dist/index.js`). This will happen automatically when you publish your component to npm, courtesy of the `prepublishOnly` hook in package.json.
+<Table bind:page {rows} {pageSize} let:rows={rows2}>
+  <thead slot="head">
+    <tr>
+      <td>Name</td>
+      <td>Lastname</td>
+      <td>Age</td>
+    </tr>
+  </thead>
+  <tbody>
+    {#each rows2 as row, index (row)}
+      <Row {index} on:click={() => cellOnClick(row)}>
+        <td>{row.name}</td>
+        <td>{row.lastName}</td>
+        <td>{row.age}</td>
+      </Row>
+    {/each}
+  </tbody>
+</Table>
+```
