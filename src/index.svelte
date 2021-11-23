@@ -1,6 +1,6 @@
 <script context="module">
   import Pagination, {
-    setLabels as _setPaginationLabels
+    setLabels as _setPaginationLabels,
   } from "./Pagination.svelte";
   import Row from "./Row.svelte";
   import Search, { setLabels as _setSearchLabels } from "./Search.svelte";
@@ -32,11 +32,8 @@
   export let labels = {
     empty: "No records available",
     loading: "Loading data",
-    ...globalLabels
+    ...globalLabels,
   };
-
-  let buttons = [-2, -1, 0, 1, 2];
-  let pageCount = 0;
 
   $: filteredRows = rows;
   $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
@@ -47,13 +44,13 @@
       pageIndex,
       pageSize,
       rows,
-      filteredRows
+      filteredRows,
     }),
     setPage: (_page, _pageIndex) => {
       page = _page;
       pageIndex = _pageIndex;
     },
-    setRows: _rows => (filteredRows = _rows)
+    setRows: (_rows) => (filteredRows = _rows),
   });
 
   function onPageChange(event) {
@@ -65,17 +62,65 @@
   }
 </script>
 
+<slot name="top">
+  <div class="slot-top">
+    <svelte:component this={Search} on:search={onSearch} />
+  </div>
+</slot>
+
+<table class={"table " + $$props.class} class:responsive>
+  <slot name="head" />
+  {#if loading}
+    <tbody>
+      <tr>
+        <td class="center" colspan="100%">
+          <span>
+            {@html labels.loading}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  {:else if visibleRows.length === 0}
+    <tbody>
+      <tr>
+        <td class="center" colspan="100%">
+          <span>
+            {@html labels.empty}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  {:else}
+    <slot rows={visibleRows} />
+  {/if}
+  <slot name="foot" />
+</table>
+
+<slot name="bottom">
+  <div class="slot-bottom">
+    <svelte:component
+      this={Pagination}
+      {page}
+      {pageSize}
+      {serverSide}
+      count={filteredRows.length - 1}
+      on:pageChange={onPageChange}
+    />
+  </div>
+</slot>
+
 <style>
   .table {
     width: 100%;
     border-collapse: collapse;
   }
 
-  .table :global(th, td) {
+  .table :global(th) {
     position: relative;
   }
 
   .table :global(td) {
+    position: relative;
     padding: 0.3em 0.3em;
   }
 
@@ -149,49 +194,3 @@
     }
   }
 </style>
-
-<slot name="top">
-  <div class="slot-top">
-    <svelte:component this={Search} on:search={onSearch} />
-  </div>
-</slot>
-
-<table class={'table ' + $$props.class} class:responsive>
-  <slot name="head" />
-  {#if loading}
-    <tbody>
-      <tr>
-        <td class="center" colspan="100%">
-          <span>
-            {@html labels.loading}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  {:else if visibleRows.length === 0}
-    <tbody>
-      <tr>
-        <td class="center" colspan="100%">
-          <span>
-            {@html labels.empty}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  {:else}
-    <slot rows={visibleRows} />
-  {/if}
-  <slot name="foot" />
-</table>
-
-<slot name="bottom">
-  <div class="slot-bottom">
-    <svelte:component
-      this={Pagination}
-      {page}
-      {pageSize}
-      {serverSide}
-      count={filteredRows.length - 1}
-      on:pageChange={onPageChange} />
-  </div>
-</slot>
