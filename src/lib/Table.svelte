@@ -1,21 +1,9 @@
-<script lang="ts" context="module">
-	export interface TableLabels {
-		empty?: string;
-		loading?: string;
-	}
-
-	let globalLabels: TableLabels;
-
-	export function setTableLabels(labels: TableLabels) {
-		globalLabels = labels;
-	}
-</script>
-
 <script lang="ts">
+	import { DEFAULT_TABLE_LABELS } from '$lib/constants';
+	import Pagination from '$lib/Pagination.svelte';
+	import Search from '$lib/Search.svelte';
+	import { STATE_KEY, type TableLabels } from '$lib/state';
 	import { createEventDispatcher, setContext } from 'svelte';
-	import Pagination from './Pagination.svelte';
-	import Search from './Search.svelte';
-	import { STATE_KEY } from './state';
 	const dispatch = createEventDispatcher();
 
 	export let loading = false;
@@ -25,11 +13,7 @@
 	export let responsive = true;
 	export let rows: any[];
 	export let serverSide = false;
-	export let labels: TableLabels = {
-		empty: 'No records available',
-		loading: 'Loading data',
-		...globalLabels
-	};
+	export let labels: TableLabels = DEFAULT_TABLE_LABELS;
 
 	$: filteredRows = rows;
 	$: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);

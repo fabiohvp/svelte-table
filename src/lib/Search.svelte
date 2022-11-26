@@ -1,18 +1,7 @@
-<script lang="ts" context="module">
-	export interface SearchLabels {
-		placeholder?: string;
-	}
-
-	let globalLabels: SearchLabels;
-
-	export function setSearchLabels(labels: SearchLabels) {
-		globalLabels = labels;
-	}
-</script>
-
 <script lang="ts">
+	import { DEFAULT_SEARCH_LABELS } from '$lib/constants';
+	import { STATE_KEY, type SearchLabels, type State } from '$lib/state';
 	import { createEventDispatcher, getContext } from 'svelte';
-	import { STATE_KEY, type State } from './state';
 	const dispatch = createEventDispatcher();
 	const stateContext = getContext<State>(STATE_KEY);
 
@@ -28,10 +17,7 @@
 	export let index = -1;
 	export let text = '';
 
-	export let labels: SearchLabels = {
-		placeholder: 'Search',
-		...globalLabels
-	};
+	export let labels: SearchLabels = DEFAULT_SEARCH_LABELS;
 
 	async function onSearch(event: KeyboardEvent) {
 		const state = stateContext.getState();

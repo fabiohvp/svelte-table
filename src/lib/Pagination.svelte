@@ -1,21 +1,7 @@
-<script lang="ts" context="module">
-	export interface PaginationLabels {
-		first?: string;
-		last?: string;
-		next?: string;
-		previous?: string;
-	}
-
-	let globalLabels: PaginationLabels;
-
-	export function setPaginationLabels(labels: PaginationLabels) {
-		globalLabels = labels;
-	}
-</script>
-
 <script lang="ts">
+	import { DEFAULT_PAGINATION_LABELS } from '$lib/constants';
+	import { STATE_KEY, type PaginationLabels, type State } from '$lib/state';
 	import { createEventDispatcher, getContext } from 'svelte';
-	import { STATE_KEY, type State } from './state';
 	const dispatch = createEventDispatcher();
 	const stateContext = getContext<State>(STATE_KEY);
 
@@ -25,13 +11,7 @@
 	export let pageSize: number;
 	export let serverSide = false;
 
-	export let labels: PaginationLabels = {
-		first: 'First',
-		last: 'Last',
-		next: 'Next',
-		previous: 'Previous',
-		...globalLabels
-	};
+	export let labels: PaginationLabels = DEFAULT_PAGINATION_LABELS;
 
 	$: pageCount = Math.floor(count / pageSize);
 

@@ -1,31 +1,13 @@
-<script lang="ts" context="module">
-	export interface SortLabels {
-		asc?: { title: string; html: string };
-		desc?: { title: string; html: string };
-		unsorted?: { title: string; html: string };
-	}
-
-	let globalLabels: SortLabels;
-
-	export function setSortLabels(labels: SortLabels) {
-		globalLabels = labels;
-	}
-</script>
-
 <script lang="ts">
+	import { DEFAULT_SORT_LABELS } from '$lib/constants';
+	import { STATE_KEY, type SortLabels, type State } from '$lib/state';
 	import { createEventDispatcher, getContext } from 'svelte';
-	import { STATE_KEY, type State } from './state';
 	const dispatch = createEventDispatcher();
 	const stateContext = getContext<State>(STATE_KEY);
 
 	export let dir = 'none';
 	export let key: string;
-	export let labels: SortLabels = {
-		asc: { title: 'Ascending', html: '&#8593;' },
-		desc: { title: 'Desceding', html: '&#8595;' },
-		unsorted: { title: 'Unsorted', html: '&#8645;' },
-		...globalLabels
-	};
+	export let labels: SortLabels = DEFAULT_SORT_LABELS;
 
 	function onClick(event: MouseEvent) {
 		const state = stateContext.getState();
