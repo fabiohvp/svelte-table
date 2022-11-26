@@ -13,7 +13,7 @@ export function getAll(): Promise<any[]> {
 	return new Promise((resolve, reject) => {
 		setTimeout(function () {
 			resolve(data);
-		}, 500);
+		}, 250);
 	});
 }
 
@@ -37,26 +37,26 @@ export function getData(
 
 	return new Promise((resolve, reject) => {
 		setTimeout(function () {
-			const originalRows = originalData.slice(page * pageSize);
 			let rows = [];
 			let rowsCount = data.length - 1;
 
 			if (text && text.length > 0) {
-				for (let i in originalRows) {
-					for (let j in originalRows[i]) {
-						if (originalRows[i][j].toString().toLowerCase().indexOf(text) > -1) {
-							rows.push(originalRows[i]);
+				for (let i in originalData) {
+					for (let j in originalData[i]) {
+						if (originalData[i][j]?.toString().toLowerCase().indexOf(text) > -1) {
+							rows.push(originalData[i]);
 							break;
 						}
 					}
 				}
-
 				rowsCount = rows.length - 1;
 			} else {
-				rows = originalRows;
+				console.log(page, pageSize);
+				rows = originalData.slice(page * pageSize);
 			}
 
+			console.log(rowsCount);
 			resolve({ rows: rows.slice(0, pageSize), rowsCount: rowsCount });
-		}, 500);
+		}, 250);
 	});
 }

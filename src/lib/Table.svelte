@@ -8,27 +8,24 @@
 
 	export let loading = false;
 	export let page = 0;
-	export let pageIndex = 0;
 	export let pageSize = 10;
 	export let responsive = true;
-	export let rows: any[];
-	export let serverSide = false;
+	export let rows: any[] = [];
 	export let labels: TableLabels = DEFAULT_TABLE_LABELS;
 
+	$: pageIndex = page * pageSize;
 	$: filteredRows = rows;
-	$: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+	$: visibleRows = filteredRows.slice(0, pageIndex + pageSize);
 
 	setContext(STATE_KEY, {
 		getState: () => ({
 			page,
-			pageIndex,
 			pageSize,
 			rows,
 			filteredRows
 		}),
-		setPage: (_page: number, _pageIndex: number) => {
+		setPage: (_page: number) => {
 			page = _page;
-			pageIndex = _pageIndex;
 		},
 		setRows: (_rows: any[]) => (filteredRows = _rows)
 	});
@@ -71,7 +68,7 @@
 			</tr>
 		</tbody>
 	{:else}
-		<slot rows={visibleRows} />
+		<slot {visibleRows} />
 	{/if}
 	<slot name="foot" />
 </table>
@@ -82,7 +79,6 @@
 			this={Pagination}
 			{page}
 			{pageSize}
-			{serverSide}
 			count={filteredRows.length - 1}
 			on:pageChange={onPageChange}
 		/>
@@ -90,18 +86,24 @@
 </slot>
 
 <style>
+	:root {
+		--border-color: #eee;
+	}
+
 	.table {
 		width: 100%;
 		border-collapse: collapse;
 	}
 
-	.table :global(th) {
-		position: relative;
+	.table > :global(tbody) {
+		border-bottom: 1px solid var(--border-color);
+		border-top: 1px solid var(--border-color);
 	}
 
+	.table :global(th),
 	.table :global(td) {
 		position: relative;
-		padding: 0.3em 0.3em;
+		padding: 0.5rem 0.5rem;
 	}
 
 	.center {
@@ -113,13 +115,6 @@
 		padding: 10px 10px;
 		float: left;
 		width: 100%;
-	}
-
-	.slot-top,
-	.slot-bottom {
-		float: left;
-		width: 100%;
-		margin-top: 1em;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -154,8 +149,8 @@
 
 		table.responsive :global(td::before) {
 			/*
-	* aria-label has no advantage, it won't be read inside a table content: attr(aria-label);
-	*/
+			* aria-label has no advantage, it won't be read inside a table content: attr(aria-label);
+			*/
 			content: attr(data-label);
 			float: left;
 			font-weight: bold;

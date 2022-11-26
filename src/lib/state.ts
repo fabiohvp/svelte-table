@@ -31,12 +31,11 @@ export interface State {
 			table: TableLabels;
 		};
 		page: number;
-		pageIndex: number;
 		pageSize: number;
 		rows: any[];
 		filteredRows: any[];
 	};
 	setLabels: () => void;
-	setPage: (_page: number, _pageIndex: number) => void;
+	setPage: (_page: number) => void;
 	setRows: (_rows: any[]) => void;
 }

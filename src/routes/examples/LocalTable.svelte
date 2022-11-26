@@ -29,7 +29,7 @@
 	}
 </script>
 
-<Table {page} {pageSize} {rows} let:rows={rows2}>
+<Table {page} {pageSize} {rows} let:visibleRows>
 	<thead slot="head">
 		<tr>
 			<th>
@@ -47,7 +47,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each rows2 as row, index (row)}
+		{#each visibleRows as row, index (row)}
 			<Row {index} on:click={() => onCellClick(row)}>
 				<td data-label="Name">{row.name}</td>
 				<td data-label="Lastname">{row.lastName}</td>

@@ -16,7 +16,6 @@
 	};
 	export let index = -1;
 	export let text = '';
-
 	export let labels: SearchLabels = DEFAULT_SEARCH_LABELS;
 
 	async function onSearch(event: KeyboardEvent) {
@@ -27,7 +26,6 @@
 			index,
 			text,
 			page: state.page,
-			pageIndex: state.pageIndex,
 			pageSize: state.pageSize,
 			preventDefault: false,
 			rows: state.filteredRows
@@ -40,14 +38,14 @@
 			} else {
 				stateContext.setRows(detail.rows.filter((r) => detail.filter(r, detail.text, index)));
 			}
-			stateContext.setPage(0, 0);
+			stateContext.setPage(0);
 		} else {
 			stateContext.setRows(detail.rows);
 		}
 	}
 </script>
 
-<div class="search">
+<section class="search">
 	<input
 		type="search"
 		title={labels.placeholder}
@@ -55,12 +53,14 @@
 		bind:value={text}
 		on:keyup={onSearch}
 	/>
-</div>
+</section>
 
 <style>
 	.search {
 		width: 33.3%;
 		float: right;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
 	}
 	.search input {
 		width: 100%;

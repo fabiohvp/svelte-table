@@ -20,6 +20,6 @@
 
 <style>
 	.odd {
-		background-color: #f7f7f7;
+		background-color: #fbfbfb;
 	}
 </style>

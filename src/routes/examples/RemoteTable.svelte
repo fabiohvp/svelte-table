@@ -11,7 +11,6 @@
 
 	let rows: any[] = [];
 	let page = 0; //first page
-	let pageIndex = 0; //first row
 	let pageSize = 3; //optional, 10 by default
 
 	let loading = true;
@@ -52,7 +51,7 @@
 	}
 </script>
 
-<Table {loading} {rows} {pageIndex} {pageSize} let:rows={rows2}>
+<Table {loading} {rows} {page} {pageSize} let:visibleRows>
 	<div slot="top">
 		<Search on:search={onSearch} />
 	</div>
@@ -73,7 +72,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each rows2 as row, index (row)}
+		{#each visibleRows as row, index (row)}
 			<Row {index} on:click={() => onCellClick(row)}>
 				<td data-label="Name">{row.name}</td>
 				<td data-label="Lastname">{row.lastName}</td>
@@ -82,12 +81,6 @@
 		{/each}
 	</tbody>
 	<div slot="bottom">
-		<Pagination
-			{page}
-			{pageSize}
-			count={rowsCount}
-			serverSide={true}
-			on:pageChange={onPageChange}
-		/>
+		<Pagination {page} {pageSize} count={rowsCount} on:pageChange={onPageChange} />
 	</div>
 </Table>
