@@ -8,7 +8,7 @@
 
 	let globalLabels: PaginationLabels;
 
-	export function setLabels(labels: PaginationLabels) {
+	export function setPaginationLabels(labels: PaginationLabels) {
 		globalLabels = labels;
 	}
 </script>

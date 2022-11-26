@@ -5,7 +5,7 @@
 
 	let globalLabels: SearchLabels;
 
-	export function setLabels(labels: SearchLabels) {
+	export function setSearchLabels(labels: SearchLabels) {
 		globalLabels = labels;
 	}
 </script>

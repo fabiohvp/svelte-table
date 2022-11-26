@@ -7,7 +7,7 @@
 
 	let globalLabels: SortLabels;
 
-	export function setLabels(labels: SortLabels) {
+	export function setSortLabels(labels: SortLabels) {
 		globalLabels = labels;
 	}
 </script>

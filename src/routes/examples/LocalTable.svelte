@@ -1,7 +1,9 @@
 <script lang="ts">
+	import Row from '$lib/Row.svelte';
+	import Sort from '$lib/Sort.svelte';
 	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
 	//Sort component is optional
-	import Table, { Row, Sort } from '$lib/Table.svelte';
+	import Table from '$lib/Table.svelte';
 	import { onMount } from 'svelte';
 	import { getAll } from './server';
 	import { sortString } from './sorting';

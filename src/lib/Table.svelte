@@ -1,10 +1,4 @@
 <script lang="ts" context="module">
-	import Pagination, { setLabels as _setPaginationLabels } from './Pagination.svelte';
-	import Row from './Row.svelte';
-	import Search, { setLabels as _setSearchLabels } from './Search.svelte';
-	import Sort, { setLabels as _setSortLabels } from './Sort.svelte';
-	export { Pagination, Row, Search, Sort };
-
 	export interface TableLabels {
 		empty?: string;
 		loading?: string;
@@ -15,14 +9,12 @@
 	export function setTableLabels(labels: TableLabels) {
 		globalLabels = labels;
 	}
-
-	export const setPaginationLabels = _setPaginationLabels;
-	export const setSearchLabels = _setSearchLabels;
-	export const setSortLabels = _setSortLabels;
 </script>
 
 <script lang="ts">
 	import { createEventDispatcher, setContext } from 'svelte';
+	import Pagination from './Pagination.svelte';
+	import Search from './Search.svelte';
 	import { STATE_KEY } from './state';
 	const dispatch = createEventDispatcher();
 

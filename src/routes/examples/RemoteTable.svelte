@@ -1,7 +1,11 @@
 <script lang="ts">
 	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
 	//Sort component is optional
-	import Table, { Pagination, Row, Search, Sort } from '$lib/Table.svelte';
+	import Pagination from '$lib/Pagination.svelte';
+	import Row from '$lib/Row.svelte';
+	import Search from '$lib/Search.svelte';
+	import Sort from '$lib/Sort.svelte';
+	import Table from '$lib/Table.svelte';
 	import { onMount } from 'svelte';
 	import { getData } from './server';
 
