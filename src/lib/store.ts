@@ -2,7 +2,7 @@ import { derived, writable } from 'svelte/store';
 import { DEFAULT_TABLE_LABELS } from './constants';
 import type { TableStore } from './interfaces';
 
-export function createTableStore<T>({
+export function createTableStore({
 	remote = false,
 	rows = [],
 	totalFilteredRows = 0,
@@ -11,12 +11,12 @@ export function createTableStore<T>({
 	pageSize = 10
 }: Partial<{
 	remote: boolean;
-	rows: T[];
+	rows: any[];
 	totalFilteredRows: number;
 	totalRows: number;
 	page: number;
 	pageSize: number;
-}>): TableStore<T> {
+}>): TableStore {
 	rows = rows ?? [];
 	const { subscribe, set, update } = writable(rows);
 	const filteredRowsStore = writable(rows.slice());
@@ -28,7 +28,7 @@ export function createTableStore<T>({
 
 	const rowsStore = {
 		subscribe,
-		set: (rows: T[]) => {
+		set: (rows: any[]) => {
 			set(rows);
 			filteredRowsStore.set(rows.slice());
 		},

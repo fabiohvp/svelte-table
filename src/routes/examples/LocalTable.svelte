@@ -15,7 +15,7 @@
 		[key: string]: () => void;
 	}
 
-	const store = createTableStore<any>({ pageSize: 3 });
+	const store = createTableStore({ pageSize: 3 });
 	const { filteredRows, page, rows, totalFilteredRows, totalRows } = store;
 	const sortHistory: SortHistory = {};
 

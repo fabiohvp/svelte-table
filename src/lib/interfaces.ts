@@ -47,16 +47,16 @@ export interface TableLabels {
 	sort: SortLabels;
 }
 
-export interface TableStore<T> {
-	filteredRows: Writable<T[]>;
+export interface TableStore {
+	filteredRows: Writable<any[]>;
 	labels: Writable<TableLabels>;
 	loading: Writable<boolean>;
 	page: Writable<number>;
 	pageSize: Writable<number>;
 	remote: Writable<boolean>;
 	responsive: Writable<boolean>;
-	rows: Writable<T[]>;
+	rows: Writable<any[]>;
 	totalFilteredRows: Writable<number>;
 	totalRows: Writable<number>;
-	visibleRows: Readable<T[]>;
+	visibleRows: Readable<any[]>;
 }

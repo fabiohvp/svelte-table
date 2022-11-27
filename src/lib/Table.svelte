@@ -5,7 +5,7 @@
 	import Search from './Search.svelte';
 	const dispatch = createEventDispatcher();
 
-	export let store: TableStore<any>;
+	export let store: TableStore;
 	const { labels, loading, page, pageSize, responsive, totalFilteredRows, totalRows, visibleRows } =
 		store;
 
