@@ -59,7 +59,7 @@ export function getData(
 			} else {
 				rows = originalData.slice(page * pageSize);
 			}
-			resolve({ rows: rows, totalFilteredRows, totalRows });
+			resolve({ rows, totalFilteredRows, totalRows });
 		}, 250);
 	});
 }
