@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import type { RowEventArgs } from './interfaces';
 	const dispatch = createEventDispatcher();
 
 	export let index = 0;
 
 	function onClick(event: MouseEvent) {
-		dispatch('click', event);
+		const detail: RowEventArgs = {
+			originalEvent: event,
+			index
+		};
+		dispatch('click', detail);
 	}
 </script>
 

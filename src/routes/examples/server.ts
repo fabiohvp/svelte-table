@@ -1,4 +1,4 @@
-import { sortNumber, sortString } from './sorting.js';
+import { sortNumber, sortString, type SortParams } from '../../lib/sort.js';
 
 const data = [
 	{ name: 'a', lastName: 'o', age: 12 },
@@ -6,7 +6,11 @@ const data = [
 	{ name: 'c', lastName: 'm', age: 13 },
 	{ name: 'd', lastName: 'l', age: 21 },
 	{ name: 'e', lastName: 'k', age: 2 },
-	{ name: 'f', lastName: 'j', age: 4 }
+	{ name: 'f', lastName: 'j', age: 4 },
+	{ name: 'g', lastName: 'i', age: 22 },
+	{ name: 'h', lastName: 'h', age: 31 },
+	{ name: 'i', lastName: 'g', age: 14 },
+	{ name: 'j', lastName: 'f', age: 2 }
 ];
 
 export function getAll(): Promise<any[]> {
@@ -20,16 +24,16 @@ export function getAll(): Promise<any[]> {
 export function getData(
 	page: number,
 	pageSize: number,
-	text: string,
-	sorting: { dir: string; key: string }
+	sortingParams?: SortParams,
+	text?: string
 ): Promise<any> {
 	let originalData: any;
 
-	if (sorting) {
-		if (sorting.key === 'age') {
-			originalData = sortNumber(data, sorting.dir, sorting.key);
+	if (sortingParams) {
+		if (sortingParams.key === 'age') {
+			originalData = sortNumber(data, sortingParams);
 		} else {
-			originalData = sortString(data, sorting.dir, sorting.key);
+			originalData = sortString(data, sortingParams);
 		}
 	} else {
 		originalData = data;
@@ -38,7 +42,8 @@ export function getData(
 	return new Promise((resolve, reject) => {
 		setTimeout(function () {
 			let rows = [];
-			let rowsCount = data.length - 1;
+			let totalFilteredRows = data.length;
+			let totalRows = data.length;
 
 			if (text && text.length > 0) {
 				for (let i in originalData) {
@@ -49,14 +54,12 @@ export function getData(
 						}
 					}
 				}
-				rowsCount = rows.length - 1;
+				totalFilteredRows = rows.length;
+				rows = rows.slice(page * pageSize, page * pageSize + pageSize);
 			} else {
-				console.log(page, pageSize);
 				rows = originalData.slice(page * pageSize);
 			}
-
-			console.log(rowsCount);
-			resolve({ rows: rows.slice(0, pageSize), rowsCount: rowsCount });
+			resolve({ rows: rows, totalFilteredRows, totalRows });
 		}, 250);
 	});
 }

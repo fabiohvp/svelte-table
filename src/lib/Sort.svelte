@@ -1,35 +1,28 @@
 <script lang="ts">
-	import { DEFAULT_SORT_LABELS } from '$lib/constants';
-	import { STATE_KEY, type SortLabels, type State } from '$lib/state';
-	import { createEventDispatcher, getContext } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+	import { DEFAULT_TABLE_LABELS } from './constants';
+	import type { SortEventArgs, SortLabels } from './interfaces';
 	const dispatch = createEventDispatcher();
-	const stateContext = getContext<State>(STATE_KEY);
 
 	export let dir = 'none';
 	export let key: string;
-	export let labels: SortLabels = DEFAULT_SORT_LABELS;
+	export let labels: SortLabels = DEFAULT_TABLE_LABELS.sort;
 
 	function onClick(event: MouseEvent) {
-		const state = stateContext.getState();
-		let rows;
-
-		const detail = {
+		const detail: SortEventArgs = {
 			originalEvent: event,
 			key,
-			dir: dir !== 'desc' ? 'desc' : 'asc',
-			preventDefault: false,
-			rows: state.filteredRows
+			dir: dir === 'desc' ? 'asc' : 'desc'
 		};
-
 		dispatch('sort', detail);
 
-		if (detail.preventDefault !== true) {
+		if (!event.defaultPrevented) {
 			dir = detail.dir;
 		}
-		stateContext.setRows(detail.rows);
 	}
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <span class="sort" on:click={onClick}>
 	{#if dir === 'asc'}
 		<span title={labels.asc?.title}>

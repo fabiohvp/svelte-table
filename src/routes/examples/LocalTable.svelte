@@ -1,35 +1,59 @@
 <script lang="ts">
+	import { filter } from '$lib/filter';
+	import type { PaginationEventArgs, SearchEventArgs, SortEventArgs } from '$lib/interfaces';
 	import Row from '$lib/Row.svelte';
 	import Sort from '$lib/Sort.svelte';
+	import { createTableStore } from '$lib/store';
 	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
 	//Sort component is optional
 	import Table from '$lib/Table.svelte';
 	import { onMount } from 'svelte';
+	import { sortNumber, sortString } from '../../lib/sort';
 	import { getAll } from './server';
-	import { sortString } from './sorting';
 
-	let rows: any[] = [];
-	let page = 0; //first page
-	let pageSize = 3; //optional, 10 by default
+	interface SortHistory {
+		[key: string]: () => void;
+	}
+
+	const store = createTableStore<any>({ pageSize: 3 });
+	const { filteredRows, page, rows, totalFilteredRows, totalRows } = store;
+	const sortHistory: SortHistory = {};
 
 	onMount(async () => {
-		rows = await getAll();
+		$rows = await getAll();
+		$totalFilteredRows = $rows.length;
+		$totalRows = $rows.length;
 	});
 
 	function onCellClick(row: any) {
 		alert(JSON.stringify(row));
 	}
 
-	function onSortString(event: CustomEvent) {
-		event.detail.rows = sortString(event.detail.rows, event.detail.dir, event.detail.key);
+	function onPageChange(event: CustomEvent<PaginationEventArgs>) {
+		Object.keys(sortHistory).forEach((key) => sortHistory[key]());
 	}
 
-	function onSortNumber(event: CustomEvent) {
-		event.detail.rows = sortString(event.detail.rows, event.detail.dir, event.detail.key);
+	function onSearch(event: CustomEvent<SearchEventArgs>) {
+		$filteredRows = $rows.filter((row) => filter(row, event.detail.text));
+		$totalFilteredRows = $filteredRows.length;
+
+		Object.keys(sortHistory).forEach((key) => sortHistory[key]());
+	}
+
+	function onSortString(event: CustomEvent<SortEventArgs>) {
+		const sort = () => ($filteredRows = sortString($filteredRows, event.detail));
+		sortHistory[event.detail.key] = sort;
+		sort();
+	}
+
+	function onSortNumber(event: CustomEvent<SortEventArgs>) {
+		const sort = () => ($filteredRows = sortNumber($filteredRows, event.detail));
+		sortHistory[event.detail.key] = sort;
+		sort();
 	}
 </script>
 
-<Table {page} {pageSize} {rows} let:visibleRows>
+<Table {store} let:visibleRows on:pageChange={onPageChange} on:search={onSearch}>
 	<thead slot="head">
 		<tr>
 			<th>

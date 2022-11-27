@@ -1,34 +1,13 @@
 <script lang="ts">
-	import { DEFAULT_TABLE_LABELS } from '$lib/constants';
-	import Pagination from '$lib/Pagination.svelte';
-	import Search from '$lib/Search.svelte';
-	import { STATE_KEY, type TableLabels } from '$lib/state';
-	import { createEventDispatcher, setContext } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+	import type { TableStore } from './interfaces';
+	import Pagination from './Pagination.svelte';
+	import Search from './Search.svelte';
 	const dispatch = createEventDispatcher();
 
-	export let loading = false;
-	export let page = 0;
-	export let pageSize = 10;
-	export let responsive = true;
-	export let rows: any[] = [];
-	export let labels: TableLabels = DEFAULT_TABLE_LABELS;
-
-	$: pageIndex = page * pageSize;
-	$: filteredRows = rows;
-	$: visibleRows = filteredRows.slice(0, pageIndex + pageSize);
-
-	setContext(STATE_KEY, {
-		getState: () => ({
-			page,
-			pageSize,
-			rows,
-			filteredRows
-		}),
-		setPage: (_page: number) => {
-			page = _page;
-		},
-		setRows: (_rows: any[]) => (filteredRows = _rows)
-	});
+	export let store: TableStore<any>;
+	const { labels, loading, page, pageSize, responsive, totalFilteredRows, totalRows, visibleRows } =
+		store;
 
 	function onPageChange(event: CustomEvent) {
 		dispatch('pageChange', event.detail);
@@ -41,34 +20,34 @@
 
 <slot name="top">
 	<div class="slot-top">
-		<svelte:component this={Search} on:search={onSearch} />
+		<svelte:component this={Search} labels={$labels.search} on:search={onSearch} />
 	</div>
 </slot>
 
-<table class={'table ' + $$props.class} class:responsive>
+<table class={'table ' + $$props.class} class:responsive={$responsive}>
 	<slot name="head" />
-	{#if loading}
+	{#if $loading}
 		<tbody>
 			<tr>
 				<td class="center" colspan="100">
 					<span>
-						{@html labels.loading}
+						{@html $labels.loading}
 					</span>
 				</td>
 			</tr>
 		</tbody>
-	{:else if visibleRows.length === 0}
+	{:else if $visibleRows.length === 0}
 		<tbody>
 			<tr>
 				<td class="center" colspan="100">
 					<span>
-						{@html labels.empty}
+						{@html $labels.empty}
 					</span>
 				</td>
 			</tr>
 		</tbody>
 	{:else}
-		<slot {visibleRows} />
+		<slot visibleRows={$visibleRows} />
 	{/if}
 	<slot name="foot" />
 </table>
@@ -77,9 +56,11 @@
 	<div class="slot-bottom">
 		<svelte:component
 			this={Pagination}
-			{page}
-			{pageSize}
-			count={filteredRows.length - 1}
+			bind:page={$page}
+			pageSize={$pageSize}
+			totalFilteredRows={$totalFilteredRows}
+			totalRows={$totalRows}
+			labels={$labels.pagination}
 			on:pageChange={onPageChange}
 		/>
 	</div>

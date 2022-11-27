@@ -1,47 +1,20 @@
 <script lang="ts">
-	import { DEFAULT_SEARCH_LABELS } from '$lib/constants';
-	import { STATE_KEY, type SearchLabels, type State } from '$lib/state';
-	import { createEventDispatcher, getContext } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+	import { DEFAULT_TABLE_LABELS } from './constants';
+	import type { SearchEventArgs, SearchLabels } from './interfaces';
 	const dispatch = createEventDispatcher();
-	const stateContext = getContext<State>(STATE_KEY);
 
-	export let filter = (row: any, text: string, index: number) => {
-		text = text.toLowerCase();
-		for (let i in row) {
-			if ((row[i] || '').toString().toLowerCase().indexOf(text) > -1) {
-				return true;
-			}
-		}
-		return false;
-	};
 	export let index = -1;
+	export let labels: SearchLabels = DEFAULT_TABLE_LABELS.search;
 	export let text = '';
-	export let labels: SearchLabels = DEFAULT_SEARCH_LABELS;
 
 	async function onSearch(event: KeyboardEvent) {
-		const state = stateContext.getState();
-		const detail = {
+		const detail: SearchEventArgs = {
 			originalEvent: event,
-			filter,
 			index,
-			text,
-			page: state.page,
-			pageSize: state.pageSize,
-			preventDefault: false,
-			rows: state.filteredRows
+			text
 		};
 		dispatch('search', detail);
-
-		if (detail.preventDefault !== true) {
-			if (detail.text.length === 0) {
-				stateContext.setRows(state.rows);
-			} else {
-				stateContext.setRows(detail.rows.filter((r) => detail.filter(r, detail.text, index)));
-			}
-			stateContext.setPage(0);
-		} else {
-			stateContext.setRows(detail.rows);
-		}
 	}
 </script>
 

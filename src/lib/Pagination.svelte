@@ -1,39 +1,43 @@
 <script lang="ts">
-	import { DEFAULT_PAGINATION_LABELS } from '$lib/constants';
-	import { STATE_KEY, type PaginationLabels, type State } from '$lib/state';
-	import { createEventDispatcher, getContext } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+	import { DEFAULT_TABLE_LABELS } from './constants';
+	import type { PaginationEventArgs, PaginationLabels } from './interfaces';
 	const dispatch = createEventDispatcher();
-	const stateContext = getContext<State>(STATE_KEY);
 
 	export let buttons = [-2, -1, 0, 1, 2];
-	export let count: number;
+	export let labels: PaginationLabels = DEFAULT_TABLE_LABELS.pagination;
 	export let page = 0;
-	export let pageSize: number;
-	export let labels: PaginationLabels = DEFAULT_PAGINATION_LABELS;
+	export let pageSize = 0;
+	export let totalFilteredRows = 0;
+	export let totalRows = 0;
 
-	$: pageCount = Math.floor(count / pageSize);
-	$: pageIndex = page * pageSize;
-	$: pageItemsCount = pageIndex + pageSize;
+	let pageCount = 0;
+	let pageIndex = 0;
+	let pageItemsCount = 0;
 
-	function onChange(event: MouseEvent, page: number) {
-		const state = stateContext.getState();
-		const detail = {
+	$: {
+		pageCount = Math.floor((totalFilteredRows - 1) / pageSize);
+		pageIndex = page * pageSize;
+		pageItemsCount = pageIndex + pageSize;
+	}
+
+	function onChange(event: MouseEvent, _page: number) {
+		const detail: PaginationEventArgs = {
 			originalEvent: event,
-			page,
-			pageSize: state.pageSize,
-			preventDefault: false
+			page: _page
 		};
 		dispatch('pageChange', detail);
 
-		if (detail.preventDefault !== true) {
-			stateContext.setPage(detail.page);
+		if (!event.defaultPrevented) {
+			page = _page;
 		}
 	}
 </script>
 
 <section class="pagination">
 	<span
-		>Showing {pageIndex} to {pageItemsCount > count ? count : pageItemsCount} of {count} entries</span
+		>Showing {pageIndex} to {Math.min(pageItemsCount, totalFilteredRows)} of {totalFilteredRows}
+		entries {#if totalFilteredRows !== totalRows}(filtered from {totalRows} total entries){/if}</span
 	>
 
 	<ul>

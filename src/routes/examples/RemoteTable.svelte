@@ -1,57 +1,53 @@
 <script lang="ts">
+	import type { PaginationEventArgs, SearchEventArgs, SortEventArgs } from '$lib/interfaces';
 	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
 	//Sort component is optional
 	import Pagination from '$lib/Pagination.svelte';
 	import Row from '$lib/Row.svelte';
 	import Search from '$lib/Search.svelte';
 	import Sort from '$lib/Sort.svelte';
+	import { createTableStore } from '$lib/store';
 	import Table from '$lib/Table.svelte';
 	import { onMount } from 'svelte';
+	import type { SortParams } from '../../lib/sort';
 	import { getData } from './server';
 
-	let rows: any[] = [];
-	let page = 0; //first page
-	let pageSize = 3; //optional, 10 by default
-
-	let loading = true;
-	let rowsCount = 0;
-	let text: string;
-	let sorting: { dir: string; key: string };
+	let store = createTableStore<any>({ pageSize: 3, remote: true });
+	const { loading, page, pageSize, rows, totalFilteredRows, totalRows } = store;
 
 	onMount(async () => {
-		await load(page);
+		await load($page);
 	});
 
-	async function load(_page: number) {
-		loading = true;
-		const data = await getData(_page, pageSize, text, sorting);
-		rows = data.rows;
-		rowsCount = data.rowsCount;
-		loading = false;
+	async function load(_page: number, sort?: SortParams, text?: string) {
+		$loading = true;
+		const data = await getData(_page, $pageSize, sort, text);
+
+		$loading = false;
+		$page = _page;
+		$rows = data.rows;
+		$totalFilteredRows = data.totalFilteredRows;
+		$totalRows = data.totalRows;
 	}
 
 	function onCellClick(row: any) {
 		alert(JSON.stringify(row));
 	}
 
-	function onPageChange(event: CustomEvent) {
+	function onPageChange(event: CustomEvent<PaginationEventArgs>) {
 		load(event.detail.page);
-		page = event.detail.page;
 	}
 
-	async function onSearch(event: CustomEvent) {
-		text = event.detail.text;
-		await load(page);
-		page = 0;
+	async function onSearch(event: CustomEvent<SearchEventArgs>) {
+		await load(0, undefined, event.detail.text);
 	}
 
-	async function onSort(event: CustomEvent) {
-		sorting = { dir: event.detail.dir, key: event.detail.key };
-		await load(page);
+	async function onSort(event: CustomEvent<SortEventArgs>) {
+		await load(0, event.detail);
 	}
 </script>
 
-<Table {loading} {rows} {page} {pageSize} let:visibleRows>
+<Table {store} let:visibleRows>
 	<div slot="top">
 		<Search on:search={onSearch} />
 	</div>
@@ -81,6 +77,12 @@
 		{/each}
 	</tbody>
 	<div slot="bottom">
-		<Pagination {page} {pageSize} count={rowsCount} on:pageChange={onPageChange} />
+		<Pagination
+			page={$page}
+			pageSize={$pageSize}
+			totalFilteredRows={$totalFilteredRows}
+			totalRows={$totalRows}
+			on:pageChange={onPageChange}
+		/>
 	</div>
 </Table>
