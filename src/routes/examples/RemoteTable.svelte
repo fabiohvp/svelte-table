@@ -51,7 +51,7 @@
 	<div slot="top">
 		<Search on:search={onSearch} />
 	</div>
-	<thead slot="head">
+	<thead>
 		<tr>
 			<th>
 				Name

@@ -54,7 +54,7 @@
 </script>
 
 <Table {store} let:visibleRows on:pageChange={onPageChange} on:search={onSearch}>
-	<thead slot="head">
+	<thead>
 		<tr>
 			<th>
 				Name
