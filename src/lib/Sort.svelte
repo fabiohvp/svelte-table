@@ -7,12 +7,14 @@
 	export let dir = 'none';
 	export let key: string;
 	export let labels: SortLabels = DEFAULT_TABLE_LABELS.sort;
+	export let type = 'string';
 
 	function onClick(event: MouseEvent) {
 		const detail: SortEventArgs = {
 			originalEvent: event,
+			dir: dir === 'desc' ? 'asc' : 'desc',
 			key,
-			dir: dir === 'desc' ? 'asc' : 'desc'
+			type
 		};
 		dispatch('sort', detail);
 

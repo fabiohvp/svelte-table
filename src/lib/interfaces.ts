@@ -21,6 +21,7 @@ export interface SearchEventArgs {
 	originalEvent: KeyboardEvent;
 	index: number;
 	text: string;
+	type: string;
 }
 
 export interface SearchLabels {
@@ -31,6 +32,7 @@ export interface SortEventArgs {
 	originalEvent: MouseEvent;
 	key: string;
 	dir: string;
+	type: string;
 }
 
 export interface SortLabels {

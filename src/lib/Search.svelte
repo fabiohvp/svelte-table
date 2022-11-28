@@ -7,12 +7,14 @@
 	export let index = -1;
 	export let labels: SearchLabels = DEFAULT_TABLE_LABELS.search;
 	export let text = '';
+	export let type = 'string';
 
 	async function onSearch(event: KeyboardEvent) {
 		const detail: SearchEventArgs = {
 			originalEvent: event,
 			index,
-			text
+			text,
+			type
 		};
 		dispatch('search', detail);
 	}
