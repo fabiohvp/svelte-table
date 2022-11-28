@@ -31,7 +31,7 @@ export interface SearchLabels {
 export interface SortEventArgs {
 	originalEvent: MouseEvent;
 	key: string;
-	dir: string;
+	dir: 'asc' | 'desc';
 	type: string;
 }
 

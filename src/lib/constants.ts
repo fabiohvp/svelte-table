@@ -11,8 +11,8 @@ export const DEFAULT_TABLE_LABELS: TableLabels = {
 	},
 	search: { placeholder: 'Search' },
 	sort: {
-		asc: { title: 'Ascending', html: '&#8593;' },
-		desc: { title: 'Desceding', html: '&#8595;' },
+		asc: { title: 'Ascending', html: '&#8595;' },
+		desc: { title: 'Desceding', html: '&#8593;' },
 		unsorted: { title: 'Unsorted', html: '&#8645;' }
 	}
 };
