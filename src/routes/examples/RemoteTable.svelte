@@ -13,7 +13,7 @@
 	import { getData } from './server';
 
 	let store = createTableStore({ pageSize: 3, remote: true });
-	const { loading, page, pageSize, rows, totalFilteredRows, totalRows } = store;
+	const { loading, page, pageSize, rows, totalFilteredRows: totalFilteredRows, totalRows } = store;
 
 	onMount(async () => {
 		await load($page);

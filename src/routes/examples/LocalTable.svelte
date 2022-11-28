@@ -15,12 +15,13 @@
 		[key: string]: () => void;
 	}
 
+	let originalRows: any[] = [];
 	const store = createTableStore({ pageSize: 3 });
-	const { filteredRows, page, rows, totalFilteredRows, totalRows } = store;
+	const { rows, totalFilteredRows: totalFilteredRows, totalRows } = store;
 	const sortHistory: SortHistory = {};
 
 	onMount(async () => {
-		$rows = await getAll();
+		originalRows = $rows = await getAll();
 		$totalFilteredRows = $rows.length;
 		$totalRows = $rows.length;
 	});
@@ -34,20 +35,20 @@
 	}
 
 	function onSearch(event: CustomEvent<SearchEventArgs>) {
-		$filteredRows = $rows.filter((row) => filter(row, event.detail.text));
-		$totalFilteredRows = $filteredRows.length;
+		$rows = originalRows.filter((row) => filter(row, event.detail.text));
+		$totalFilteredRows = $rows.length;
 
 		Object.keys(sortHistory).forEach((key) => sortHistory[key]());
 	}
 
 	function onSortString(event: CustomEvent<SortEventArgs>) {
-		const sort = () => ($filteredRows = sortString($filteredRows, event.detail));
+		const sort = () => ($rows = sortString($rows, event.detail));
 		sortHistory[event.detail.key] = sort;
 		sort();
 	}
 
 	function onSortNumber(event: CustomEvent<SortEventArgs>) {
-		const sort = () => ($filteredRows = sortNumber($filteredRows, event.detail));
+		const sort = () => ($rows = sortNumber($rows, event.detail));
 		sortHistory[event.detail.key] = sort;
 		sort();
 	}

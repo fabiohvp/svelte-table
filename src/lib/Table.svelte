@@ -6,8 +6,16 @@
 	const dispatch = createEventDispatcher();
 
 	export let store: TableStore;
-	const { labels, loading, page, pageSize, responsive, totalFilteredRows, totalRows, visibleRows } =
-		store;
+	const {
+		labels,
+		loading,
+		page,
+		pageSize,
+		responsive,
+		totalFilteredRows: totalFilteredRows,
+		totalRows,
+		visibleRows
+	} = store;
 
 	function onPageChange(event: CustomEvent) {
 		dispatch('pageChange', event.detail);

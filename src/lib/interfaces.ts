@@ -48,7 +48,6 @@ export interface TableLabels {
 }
 
 export interface TableStore {
-	filteredRows: Writable<any[]>;
 	labels: Writable<TableLabels>;
 	loading: Writable<boolean>;
 	page: Writable<number>;
