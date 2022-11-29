@@ -2,7 +2,7 @@ import { derived, writable } from 'svelte/store';
 import { DEFAULT_TABLE_LABELS } from './constants';
 import type { TableStore } from './interfaces';
 
-export function createTableStore({
+export function createTableStore<T>({
 	remote = false,
 	rows = [],
 	totalFilteredRows = 0,
@@ -16,7 +16,7 @@ export function createTableStore({
 	totalRows: number;
 	page: number;
 	pageSize: number;
-}>): TableStore {
+}>): TableStore<T> {
 	rows = rows ?? [];
 	const pageStore = writable(page);
 	const pageSizeStore = writable(pageSize);

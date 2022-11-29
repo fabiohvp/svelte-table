@@ -1,7 +1,7 @@
 {
 	"name": "@fabiohvp/svelte-table",
 	"description": "Svelte-table - a simple way to render your tables",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"keywords": [
 		"svelte",
 		"table"

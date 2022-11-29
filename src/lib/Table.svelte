@@ -5,7 +5,9 @@
 	import Search from './Search.svelte';
 	const dispatch = createEventDispatcher();
 
-	export let store: TableStore;
+	type T = $$Generic;
+
+	export let store: TableStore<T>;
 	const {
 		labels,
 		loading,

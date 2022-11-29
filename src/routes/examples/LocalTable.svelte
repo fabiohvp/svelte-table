@@ -16,7 +16,7 @@
 	}
 
 	let originalRows: any[] = [];
-	const store = createTableStore({ pageSize: 3 });
+	const store = createTableStore<any>({ pageSize: 3 });
 	const { rows, totalFilteredRows: totalFilteredRows, totalRows } = store;
 	const sortHistory: SortHistory = {};
 

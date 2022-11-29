@@ -12,7 +12,7 @@
 	import type { SortParams } from '../../lib/sort';
 	import { getData } from './server';
 
-	let store = createTableStore({ pageSize: 3, remote: true });
+	let store = createTableStore<any>({ pageSize: 3, remote: true });
 	const { loading, page, pageSize, rows, totalFilteredRows: totalFilteredRows, totalRows } = store;
 
 	onMount(async () => {
