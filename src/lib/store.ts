@@ -11,7 +11,7 @@ export function createTableStore<T>({
 	pageSize = 10
 }: Partial<{
 	remote: boolean;
-	rows: any[];
+	rows: T[];
 	totalFilteredRows: number;
 	totalRows: number;
 	page: number;
