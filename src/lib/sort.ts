@@ -12,8 +12,8 @@ const numberSortDict: { asc: SortNumberMethod; desc: SortNumberMethod } = {
 };
 
 const stringSortDict: { asc: SortStringMethod; desc: SortStringMethod } = {
-	asc: (a: string, b: string) => a.localeCompare(b),
-	desc: (a: string, b: string) => b.localeCompare(a)
+	asc: (a: string, b: string) => a?.localeCompare(b),
+	desc: (a: string, b: string) => b?.localeCompare(a)
 };
 
 export function sortString(rows: any[], params: SortParams) {
