@@ -135,6 +135,7 @@
 			border-bottom: 1px solid #ddd;
 			display: block;
 			font-size: 0.8em;
+			text-align: right;
 		}
 
 		table.responsive :global(td::before) {
