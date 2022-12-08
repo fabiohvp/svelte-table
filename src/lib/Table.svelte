@@ -8,16 +8,14 @@
 	type T = $$Generic;
 
 	export let store: TableStore<T>;
-	const {
-		labels,
-		loading,
-		page,
-		pageSize,
-		responsive,
-		totalFilteredRows: totalFilteredRows,
-		totalRows,
-		visibleRows
-	} = store;
+	$: labels = store.labels;
+	$: loading = store.loading;
+	$: page = store.page;
+	$: pageSize = store.pageSize;
+	$: responsive = store.responsive;
+	$: totalFilteredRows = store.totalFilteredRows;
+	$: totalRows = store.totalRows;
+	$: visibleRows = store.visibleRows;
 
 	function onPageChange(event: CustomEvent) {
 		dispatch('pageChange', event.detail);

@@ -12,8 +12,14 @@
 	import type { SortParams } from '../../lib/sort';
 	import { getData } from './server';
 
-	let store = createTableStore<any>({ pageSize: 3, remote: true });
-	const { loading, page, pageSize, rows, totalFilteredRows: totalFilteredRows, totalRows } = store;
+	const store = createTableStore<any>({ pageSize: 3, remote: true });
+
+	$: loading = store.loading;
+	$: page = store.page;
+	$: pageSize = store.pageSize;
+	$: rows = store.rows;
+	$: totalFilteredRows = store.totalFilteredRows;
+	$: totalRows = store.totalRows;
 
 	onMount(async () => {
 		await load($page);

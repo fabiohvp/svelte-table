@@ -17,8 +17,11 @@
 
 	let originalRows: any[] = [];
 	const store = createTableStore<any>({ pageSize: 3 });
-	const { rows, totalFilteredRows: totalFilteredRows, totalRows } = store;
 	const sortHistory: SortHistory = {};
+
+	$: rows = store.rows;
+	$: totalFilteredRows = store.totalFilteredRows;
+	$: totalRows = store.totalRows;
 
 	onMount(async () => {
 		originalRows = $rows = await getAll();
