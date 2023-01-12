@@ -1,4 +1,4 @@
-import { sortNumber, sortString, type SortParams } from '../../lib/sort.js';
+import { sortNumberByKey, sortStringByKey, type SortParams } from '../../lib/sort.js';
 
 const data = [
 	{ name: 'a', lastName: 'o', age: 12 },
@@ -31,9 +31,9 @@ export function getData(
 
 	if (sortingParams) {
 		if (sortingParams.key === 'age') {
-			originalData = sortNumber(data, sortingParams);
+			originalData = sortNumberByKey(data, sortingParams.key, sortingParams.dir);
 		} else {
-			originalData = sortString(data, sortingParams);
+			originalData = sortStringByKey(data, sortingParams.key, sortingParams.dir);
 		}
 	} else {
 		originalData = data;

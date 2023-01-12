@@ -1,8 +1,9 @@
-import { derived, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 import { DEFAULT_TABLE_LABELS } from './constants';
 import type { TableStore } from './interfaces';
 
 export function createTableStore<T>({
+	loading = false,
 	remote = false,
 	rows = [],
 	totalFilteredRows = 0,
@@ -10,6 +11,7 @@ export function createTableStore<T>({
 	page = 0,
 	pageSize = 10
 }: Partial<{
+	loading: boolean;
 	remote: boolean;
 	rows: T[];
 	totalFilteredRows: number;
@@ -17,7 +19,7 @@ export function createTableStore<T>({
 	page: number;
 	pageSize: number;
 }>): TableStore<T> {
-	rows = rows ?? [];
+	const originalRowsStore = writable(rows);
 	const pageStore = writable(page);
 	const pageSizeStore = writable(pageSize);
 
@@ -41,7 +43,8 @@ export function createTableStore<T>({
 
 	return {
 		labels: writable({ ...DEFAULT_TABLE_LABELS }),
-		loading: writable(false),
+		loading: writable(loading),
+		originalRows: originalRowsStore,
 		page: pageStore,
 		pageSize: pageSizeStore,
 		remote: remoteStore,
@@ -51,4 +54,23 @@ export function createTableStore<T>({
 		totalRows: totalRowsStore,
 		visibleRows: visibleRowsStore
 	};
+}
+
+export function setFilteredRows<TData>(store: TableStore<TData>, rows: TData[]) {
+	store.rows.set(rows);
+	store.totalFilteredRows.set(rows.length);
+}
+
+export function setOriginalRows<TData>(store: TableStore<TData>, rows: TData[]) {
+	store.originalRows.set(rows);
+	store.rows.set(rows);
+	store.totalFilteredRows.set(rows.length);
+	store.totalRows.set(rows.length);
+}
+
+export function resetRows<TData>(store: TableStore<TData>) {
+	const originalRows = get(store.originalRows);
+	store.rows.set(originalRows);
+	store.totalFilteredRows.set(originalRows.length);
+	store.totalRows.set(originalRows.length);
 }

@@ -4,11 +4,11 @@
 	import Row from '$lib/Row.svelte';
 	import Sort from '$lib/Sort.svelte';
 	import { createTableStore } from '$lib/store';
-	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
+	//Row component is optionsortStringByKeyy serves to render odd/even row, you can use <tr> instead.
 	//Sort component is optional
 	import Table from '$lib/Table.svelte';
 	import { onMount } from 'svelte';
-	import { sortNumber, sortString } from '../../lib/sort';
+	import { sortNumberByKey, sortStringByKey } from '../../lib/sort';
 	import { getAll } from './server';
 
 	interface SortHistory {
@@ -45,13 +45,13 @@
 	}
 
 	function onSortString(event: CustomEvent<SortEventArgs>) {
-		const sort = () => ($rows = sortString($rows, event.detail));
+		const sort = () => ($rows = sortStringByKey($rows, event.detail.key, event.detail.dir));
 		sortHistory[event.detail.key] = sort;
 		sort();
 	}
 
 	function onSortNumber(event: CustomEvent<SortEventArgs>) {
-		const sort = () => ($rows = sortNumber($rows, event.detail));
+		const sort = () => ($rows = sortNumberByKey($rows, event.detail.key, event.detail.dir));
 		sortHistory[event.detail.key] = sort;
 		sort();
 	}

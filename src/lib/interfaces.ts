@@ -1,4 +1,5 @@
 import type { Readable, Writable } from 'svelte/store';
+import type { SortDirection } from './sort';
 
 export interface PaginationEventArgs {
 	originalEvent: MouseEvent;
@@ -31,7 +32,7 @@ export interface SearchLabels {
 export interface SortEventArgs {
 	originalEvent: MouseEvent;
 	key: string;
-	dir: 'asc' | 'desc';
+	dir: SortDirection;
 	type: string;
 }
 
@@ -52,6 +53,7 @@ export interface TableLabels {
 export interface TableStore<T> {
 	labels: Writable<TableLabels>;
 	loading: Writable<boolean>;
+	originalRows: Writable<T[]>;
 	page: Writable<number>;
 	pageSize: Writable<number>;
 	remote: Writable<boolean>;
