@@ -14,10 +14,9 @@
 	const tableStore = createTableStore<IRow>({ pageSize: 3 });
 
 	let originalRows: IRow[] = [];
-	let rows: IRow[] = [];
 
 	onMount(async () => {
-		originalRows = rows = await getAll();
+		originalRows = await getAll();
 		tableStore.setRows(originalRows);
 	});
 
