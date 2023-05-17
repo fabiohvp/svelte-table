@@ -3,6 +3,7 @@ export * from '$lib/Row.svelte';
 export * from '$lib/Search.svelte';
 export * from '$lib/Sort.svelte';
 export * from '$lib/Table.svelte';
+export * from '$lib/constants';
 export * from '$lib/filter';
 export * from '$lib/functions';
 export * from '$lib/interfaces';
