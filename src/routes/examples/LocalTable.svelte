@@ -13,15 +13,15 @@
 
 	const tableStore = createTableStore<IRow>({ pageSize: 3 });
 
-	let originalRows: any[] = [];
-	let rows: any[] = [];
+	let originalRows: IRow[] = [];
+	let rows: IRow[] = [];
 
 	onMount(async () => {
 		originalRows = rows = await getAll();
 		tableStore.setRows(originalRows);
 	});
 
-	function onCellClick(row: any) {
+	function onCellClick(row: IRow) {
 		alert(JSON.stringify(row));
 	}
 
