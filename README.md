@@ -8,7 +8,7 @@ or
 
 ## Examples
 
-You can see the examples in [Sveltelab.dev](https://www.sveltelab.dev/oznyyu3jxpa1xfa)
+You can see the examples in [Sveltelab.dev](https://www.sveltelab.dev/vs33nnuign7coeb)
 
 PS:. examples are using tableStore to manage table data but it can be managed with local variables
 
