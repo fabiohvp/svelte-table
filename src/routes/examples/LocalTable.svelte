@@ -1,32 +1,24 @@
 <script lang="ts">
-	import { filter } from '$lib/filter';
-	import type { PaginationEventArgs, SearchEventArgs, SortEventArgs } from '$lib/interfaces';
+	//Row component is optional and only serves to render odd/even row, you can use <tr> instead.
+	//Sort component is optional
 	import Row from '$lib/Row.svelte';
 	import Sort from '$lib/Sort.svelte';
-	import { createTableStore } from '$lib/store';
-	//Row component is optionsortStringByKeyy serves to render odd/even row, you can use <tr> instead.
-	//Sort component is optional
 	import Table from '$lib/Table.svelte';
+	import type { PaginationEventArgs, SearchEventArgs, SortEventArgs } from '$lib/interfaces';
+	import { sortNumberByKey, sortStringByKey } from '$lib/sort';
+	import { createTableStore } from '$lib/tableStore';
 	import { onMount } from 'svelte';
-	import { sortNumberByKey, sortStringByKey } from '../../lib/sort';
+	import type { IRow } from './IRow';
 	import { getAll } from './server';
 
-	interface SortHistory {
-		[key: string]: () => void;
-	}
+	const tableStore = createTableStore<IRow>({ pageSize: 3 });
 
 	let originalRows: any[] = [];
-	const store = createTableStore<any>({ pageSize: 3 });
-	const sortHistory: SortHistory = {};
-
-	$: rows = store.rows;
-	$: totalFilteredRows = store.totalFilteredRows;
-	$: totalRows = store.totalRows;
+	let rows: any[] = [];
 
 	onMount(async () => {
-		originalRows = $rows = await getAll();
-		$totalFilteredRows = $rows.length;
-		$totalRows = $rows.length;
+		originalRows = rows = await getAll();
+		tableStore.setRows(originalRows);
 	});
 
 	function onCellClick(row: any) {
@@ -34,31 +26,30 @@
 	}
 
 	function onPageChange(event: CustomEvent<PaginationEventArgs>) {
-		Object.keys(sortHistory).forEach((key) => sortHistory[key]());
+		tableStore.paginate(event.detail.page, event.detail.pageSize);
 	}
 
 	function onSearch(event: CustomEvent<SearchEventArgs>) {
-		$rows = originalRows.filter((row) => filter(row, event.detail.text));
-		$totalFilteredRows = $rows.length;
+		const text = event.detail.text;
 
-		Object.keys(sortHistory).forEach((key) => sortHistory[key]());
+		if (!text) {
+			tableStore.setRows(originalRows);
+		} else {
+			tableStore.search(text);
+		}
 	}
 
 	function onSortString(event: CustomEvent<SortEventArgs>) {
-		const sort = () => ($rows = sortStringByKey($rows, event.detail.key, event.detail.dir));
-		sortHistory[event.detail.key] = sort;
-		sort();
+		tableStore.sort(event.detail.key, event.detail.dir, sortStringByKey);
 	}
 
 	function onSortNumber(event: CustomEvent<SortEventArgs>) {
-		const sort = () => ($rows = sortNumberByKey($rows, event.detail.key, event.detail.dir));
-		sortHistory[event.detail.key] = sort;
-		sort();
+		tableStore.sort(event.detail.key, event.detail.dir, sortNumberByKey);
 	}
 </script>
 
-<Table {store} let:visibleRows on:pageChange={onPageChange} on:search={onSearch}>
-	<thead>
+<Table {...$tableStore} let:visibleRows on:pageChange={onPageChange} on:search={onSearch}>
+	<thead slot="head">
 		<tr>
 			<th>
 				Name

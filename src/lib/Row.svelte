@@ -1,6 +1,7 @@
 <script lang="ts">
+	import type { RowEventArgs } from '$lib/interfaces';
 	import { createEventDispatcher } from 'svelte';
-	import type { RowEventArgs } from './interfaces';
+
 	const dispatch = createEventDispatcher();
 
 	export let index = 0;
@@ -25,6 +26,6 @@
 
 <style>
 	.odd {
-		background-color: #fbfbfb;
+		background-color: var(--odd-background-color);
 	}
 </style>

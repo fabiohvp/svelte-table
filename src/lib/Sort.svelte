@@ -1,26 +1,26 @@
 <script lang="ts">
+	import { DEFAULT_SORT_LABELS } from '$lib/constants';
+	import type { SortEventArgs, SortLabels } from '$lib/interfaces';
 	import { createEventDispatcher } from 'svelte';
-	import { DEFAULT_TABLE_LABELS } from './constants';
-	import type { SortEventArgs, SortLabels } from './interfaces';
+	import type { SortDirection } from './sort';
+
 	const dispatch = createEventDispatcher();
 
-	export let dir = 'none';
+	export let dir: SortDirection | 'none' = 'none';
 	export let key: string;
-	export let labels: SortLabels = DEFAULT_TABLE_LABELS.sort;
+	export let labels: SortLabels = DEFAULT_SORT_LABELS;
 	export let type = 'string';
 
 	function onClick(event: MouseEvent) {
+		dir = dir === 'desc' ? 'asc' : 'desc';
+
 		const detail: SortEventArgs = {
 			originalEvent: event,
-			dir: dir === 'desc' ? 'asc' : 'desc',
+			dir,
 			key,
 			type
 		};
 		dispatch('sort', detail);
-
-		if (!event.defaultPrevented) {
-			dir = detail.dir;
-		}
 	}
 </script>
 

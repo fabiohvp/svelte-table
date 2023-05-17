@@ -1,22 +1,25 @@
-import { sortNumberByKey, sortStringByKey, type SortParams } from '../../lib/sort.js';
+import { filter } from '$lib/filter';
+import { sortDateByKey, sortNumberByKey, type SortDirection } from '$lib/sort';
+import type { IRow } from './IRow';
 
-const data = [
-	{ name: 'a', lastName: 'o', age: 12 },
-	{ name: 'b', lastName: 'n', age: 1 },
-	{ name: 'c', lastName: 'm', age: 13 },
-	{ name: 'd', lastName: 'l', age: 21 },
-	{ name: 'e', lastName: 'k', age: 2 },
-	{ name: 'f', lastName: 'j', age: 4 },
-	{ name: 'g', lastName: 'i', age: 22 },
-	{ name: 'h', lastName: 'h', age: 31 },
-	{ name: 'i', lastName: 'g', age: 14 },
-	{ name: 'j', lastName: 'f', age: 2 }
+const originalData: IRow[] = [
+	{ name: 'a', lastName: 'o', age: 1 },
+	{ name: 'b', lastName: 'n', age: 2 },
+	{ name: 'c', lastName: 'm', age: 23 },
+	{ name: 'd', lastName: 'l', age: 11 },
+	{ name: 'e', lastName: 'k', age: 132 },
+	{ name: 'f', lastName: 'j', age: 152 },
+	{ name: 'g', lastName: 'i', age: 4 },
+	{ name: 'h', lastName: 'h', age: 432 },
+	{ name: 'i', lastName: 'g', age: 41 },
+	{ name: 'k', lastName: 'f', age: 432 },
+	{ name: 'l', lastName: 'e', age: 552 }
 ];
 
 export function getAll(): Promise<any[]> {
 	return new Promise((resolve, reject) => {
 		setTimeout(function () {
-			resolve(data);
+			resolve(originalData);
 		}, 250);
 	});
 }
@@ -24,42 +27,36 @@ export function getAll(): Promise<any[]> {
 export function getData(
 	page: number,
 	pageSize: number,
-	sortingParams?: SortParams,
-	text?: string
-): Promise<any> {
-	let originalData: any;
+	text: string,
+	sorting: { dir: SortDirection; key: string }
+): Promise<{ rows: IRow[]; rowsCount: number }> {
+	let data: IRow[] = [...originalData];
 
-	if (sortingParams) {
-		if (sortingParams.key === 'age') {
-			originalData = sortNumberByKey(data, sortingParams.key, sortingParams.dir);
+	if (sorting) {
+		if (sorting.key === 'age') {
+			data = sortNumberByKey(data, sorting.key, sorting.dir);
 		} else {
-			originalData = sortStringByKey(data, sortingParams.key, sortingParams.dir);
+			data = sortDateByKey(data, sorting.key, sorting.dir);
 		}
-	} else {
-		originalData = data;
 	}
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve, _reject) => {
 		setTimeout(function () {
 			let rows = [];
-			let totalFilteredRows = data.length;
-			let totalRows = data.length;
+			let rowsCount = data.length;
 
 			if (text && text.length > 0) {
-				for (let i in originalData) {
-					for (let j in originalData[i]) {
-						if (originalData[i][j]?.toString().toLowerCase().indexOf(text) > -1) {
-							rows.push(originalData[i]);
-							break;
-						}
-					}
-				}
-				totalFilteredRows = rows.length;
-				rows = rows.slice(page * pageSize, page * pageSize + pageSize);
+				rows = data.filter((row) => filter(row, text));
+				rowsCount = rows.length; //need to count before slice
 			} else {
-				rows = originalData.slice(page * pageSize);
+				rows = data;
 			}
-			resolve({ rows, totalFilteredRows, totalRows });
+
+			const pageIndex = page * pageSize;
+			resolve({
+				rows: rows.slice(pageIndex, pageIndex + pageSize),
+				rowsCount
+			});
 		}, 250);
 	});
 }

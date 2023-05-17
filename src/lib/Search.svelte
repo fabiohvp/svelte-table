@@ -1,11 +1,12 @@
 <script lang="ts">
+	import { DEFAULT_SEARCH_LABELS } from '$lib/constants';
+	import type { SearchEventArgs, SearchLabels } from '$lib/interfaces';
 	import { createEventDispatcher } from 'svelte';
-	import { DEFAULT_TABLE_LABELS } from './constants';
-	import type { SearchEventArgs, SearchLabels } from './interfaces';
+
 	const dispatch = createEventDispatcher();
 
 	export let index = -1;
-	export let labels: SearchLabels = DEFAULT_TABLE_LABELS.search;
+	export let labels: SearchLabels = DEFAULT_SEARCH_LABELS;
 	export let text = '';
 	export let type = 'string';
 

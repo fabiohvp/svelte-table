@@ -18,6 +18,8 @@ const sortStringDict: { asc: SortStringMethod; desc: SortStringMethod } = {
 	desc: (a: string, b: string) => b?.localeCompare(a)
 };
 
+export type SortFunction<T> = (rows: T[], key: string, dir: SortDirection) => T[];
+
 export function sortDateBy<T>(rows: T[], getValue: (row: T) => Date, dir: SortDirection) {
 	const sortMethod = sortNumberDict[dir ?? 'asc'];
 	return rows.sort((a, b) => sortMethod(getValue(a).getTime(), getValue(b).getTime()));

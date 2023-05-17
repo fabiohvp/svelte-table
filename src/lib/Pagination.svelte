@@ -1,43 +1,34 @@
 <script lang="ts">
+	import { DEFAULT_PAGINATION_LABELS } from '$lib/constants';
 	import { createEventDispatcher } from 'svelte';
-	import { DEFAULT_TABLE_LABELS } from './constants';
 	import type { PaginationEventArgs, PaginationLabels } from './interfaces';
+
 	const dispatch = createEventDispatcher();
 
 	export let buttons = [-2, -1, 0, 1, 2];
-	export let labels: PaginationLabels = DEFAULT_TABLE_LABELS.pagination;
+	export let labels: PaginationLabels = DEFAULT_PAGINATION_LABELS;
 	export let page = 0;
-	export let pageSize = 0;
-	export let totalFilteredRows = 0;
-	export let totalRows = 0;
+	export let pageSize: number;
+	export let rowsCount: number;
 
-	let pageCount = 0;
-	let pageIndex = 0;
-	let pageItemsCount = 0;
-
-	$: {
-		pageCount = Math.floor((totalFilteredRows - 1) / pageSize);
-		pageIndex = page * pageSize;
-		pageItemsCount = pageIndex + pageSize;
-	}
+	$: pageCount = Math.ceil(rowsCount / pageSize) - 1;
+	$: pageIndex = page * pageSize;
+	$: pageItemsCount = pageIndex + pageSize;
 
 	function onChange(event: MouseEvent, _page: number) {
 		const detail: PaginationEventArgs = {
 			originalEvent: event,
-			page: _page
+			page: _page,
+			pageSize: pageSize
 		};
 		dispatch('pageChange', detail);
-
-		if (!event.defaultPrevented) {
-			page = _page;
-		}
 	}
 </script>
 
 <section class="pagination">
 	<span
-		>Showing {pageIndex} to {Math.min(pageItemsCount, totalFilteredRows)} of {totalFilteredRows}
-		entries {#if totalFilteredRows !== totalRows}(filtered from {totalRows} total entries){/if}</span
+		>Showing {pageIndex} to {pageItemsCount > rowsCount ? rowsCount : pageItemsCount} of {rowsCount}
+		entries</span
 	>
 
 	<ul>
@@ -52,25 +43,18 @@
 			</button>
 		</li>
 		{#each buttons as button}
-			{#if page + button >= 0 && page + button <= pageCount}
+			{@const buttonNumber = page + button}
+			{#if buttonNumber >= 0 && buttonNumber <= pageCount}
 				<li>
-					<button
-						class:active={page === page + button}
-						on:click={(e) => onChange(e, page + button)}
-					>
-						{page + button + 1}
+					<button class:active={page === buttonNumber} on:click={(e) => onChange(e, buttonNumber)}>
+						{buttonNumber + 1}
 					</button>
 				</li>
 			{/if}
 		{/each}
 		<li>
-			<button disabled={page > pageCount - 1} on:click={(e) => onChange(e, page + 1)}>
+			<button disabled={page >= pageCount} on:click={(e) => onChange(e, page + 1)}>
 				{labels.next}
-			</button>
-		</li>
-		<li>
-			<button disabled={page >= pageCount} on:click={(e) => onChange(e, pageCount)}>
-				{labels.last}
 			</button>
 		</li>
 	</ul>

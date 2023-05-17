@@ -1,61 +1,73 @@
 <script lang="ts">
+	import Pagination from '$lib/Pagination.svelte';
+	import Search from '$lib/Search.svelte';
+	import { DEFAULT_TABLE_LABELS } from '$lib/constants';
+	import type { PaginationEventArgs, SearchEventArgs, TableLabels } from '$lib/interfaces';
 	import { createEventDispatcher } from 'svelte';
-	import type { TableStore } from './interfaces';
-	import Pagination from './Pagination.svelte';
-	import Search from './Search.svelte';
-	const dispatch = createEventDispatcher();
 
 	type T = $$Generic;
+	const dispatch = createEventDispatcher();
 
-	export let store: TableStore<T>;
-	$: labels = store.labels;
-	$: loading = store.loading;
-	$: page = store.page;
-	$: pageSize = store.pageSize;
-	$: responsive = store.responsive;
-	$: totalFilteredRows = store.totalFilteredRows;
-	$: totalRows = store.totalRows;
-	$: visibleRows = store.visibleRows;
+	export let loading = false;
+	export let local = true;
+	export let page = 0;
+	export let pageSize = 10;
+	export let responsive = true;
+	export let rows: T[] = [];
+	export let rowsCount: number | undefined = undefined;
+	export let labels: TableLabels = DEFAULT_TABLE_LABELS;
 
-	function onPageChange(event: CustomEvent) {
+	let derivedRowsCount = 0;
+	let visibleRows: T[] = [];
+
+	$: pageIndex = page * pageSize;
+	$: if (local) {
+		visibleRows = rows.slice(pageIndex, pageIndex + pageSize);
+		derivedRowsCount = rows.length;
+	} else {
+		visibleRows = rows;
+		derivedRowsCount = rowsCount ?? rows.length;
+	}
+
+	function onPageChange(event: CustomEvent<PaginationEventArgs>) {
 		dispatch('pageChange', event.detail);
 	}
 
-	function onSearch(event: CustomEvent) {
+	function onSearch(event: CustomEvent<SearchEventArgs>) {
 		dispatch('search', event.detail);
 	}
 </script>
 
 <slot name="top">
 	<div class="slot-top">
-		<svelte:component this={Search} labels={$labels.search} on:search={onSearch} />
+		<svelte:component this={Search} on:search={onSearch} />
 	</div>
 </slot>
 
-<table class={'table ' + $$props.class} class:responsive={$responsive}>
+<table class={'table ' + $$props.class} class:responsive>
 	<slot name="head" />
-	{#if $loading}
+	{#if loading}
 		<tbody>
 			<tr>
 				<td class="center" colspan="100">
 					<span>
-						{@html $labels.loading}
+						{@html labels.loading}
 					</span>
 				</td>
 			</tr>
 		</tbody>
-	{:else if $visibleRows.length === 0}
+	{:else if visibleRows.length === 0}
 		<tbody>
 			<tr>
 				<td class="center" colspan="100">
 					<span>
-						{@html $labels.empty}
+						{@html labels.empty}
 					</span>
 				</td>
 			</tr>
 		</tbody>
 	{:else}
-		<slot visibleRows={$visibleRows} />
+		<slot {visibleRows} />
 	{/if}
 	<slot name="foot" />
 </table>
@@ -64,11 +76,9 @@
 	<div class="slot-bottom">
 		<svelte:component
 			this={Pagination}
-			bind:page={$page}
-			pageSize={$pageSize}
-			totalFilteredRows={$totalFilteredRows}
-			totalRows={$totalRows}
-			labels={$labels.pagination}
+			rowsCount={derivedRowsCount}
+			{page}
+			{pageSize}
 			on:pageChange={onPageChange}
 		/>
 	</div>
@@ -77,6 +87,7 @@
 <style>
 	:root {
 		--border-color: #eee;
+		--odd-background-color: #fbfbfb;
 	}
 
 	.table {
