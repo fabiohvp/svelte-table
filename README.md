@@ -1,6 +1,6 @@
 # Svelte-table
 
-A simple way to render your tables, the purpose of this component is to be a reausable html table wrapper without needing to coding too much javascript.
+Make your tables using HTML and leave the javascript only for user interaction (pagination/search/sort);
 
 `npm install @fabiohvp/svelte-table`  
 or  
