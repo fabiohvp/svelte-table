@@ -39,6 +39,9 @@ export function createTableStore<T>(initialState: Partial<TableData<T>> = {}) {
 		getPaginationRowIndex: (index: number) => {
 			let page = 0;
 			let pageSize = 0;
+			subscribe((s) => {
+				(page = s.page), (pageSize = s.pageSize);
+			})();
 			return getPaginationRowIndex(index, page, pageSize);
 		},
 
