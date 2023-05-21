@@ -1,9 +1,4 @@
-export type SortDirection = 'asc' | 'desc';
-
-export interface SortParams {
-	key: string;
-	dir: SortDirection;
-}
+import type { SortDirection, SortEventArgs } from './interfaces';
 
 type SortNumberMethod = (a: number, b: number) => number;
 type SortStringMethod = (a: string, b: string) => number;
@@ -19,6 +14,13 @@ const sortStringDict: { asc: SortStringMethod; desc: SortStringMethod } = {
 };
 
 export type SortFunction<T> = (rows: T[], key: string, dir: SortDirection) => T[];
+
+export function getSortAttributes(key: string, currentSorting: SortEventArgs) {
+	return {
+		key,
+		dir: (currentSorting?.key === key ? currentSorting.dir : 'none') as SortDirection
+	};
+}
 
 export function sortDateBy<T>(rows: T[], getValue: (row: T) => Date, dir: SortDirection) {
 	const sortMethod = sortNumberDict[dir ?? 'asc'];

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { DEFAULT_SORT_LABELS } from '$lib/constants';
-	import type { SortEventArgs, SortLabels } from '$lib/interfaces';
+	import type { SortDirection, SortEventArgs, SortLabels } from '$lib/interfaces';
 	import { createEventDispatcher } from 'svelte';
-	import type { SortDirection } from './sort';
 
 	const dispatch = createEventDispatcher();
 

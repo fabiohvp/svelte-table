@@ -7,12 +7,13 @@
 	import Sort from '$lib/Sort.svelte';
 	import Table from '$lib/Table.svelte';
 	import type { PaginationEventArgs, SearchEventArgs, SortEventArgs } from '$lib/interfaces';
+	import { getSortAttributes } from '$lib/sort';
 	import { createTableStore } from '$lib/tableStore';
 	import { onMount } from 'svelte';
 	import type { IRow } from './IRow';
 	import { getData } from './server';
 
-	const tableStore = createTableStore<IRow>({ pageSize: 3 });
+	const tableStore = createTableStore<IRow>({ local: false, pageSize: 3 });
 
 	let searchText: string;
 	let sorting: SortEventArgs;
@@ -42,11 +43,12 @@
 	}
 
 	async function onSort(event: CustomEvent<SortEventArgs>) {
-		load($tableStore.page, searchText, event.detail);
+		sorting = event.detail;
+		load($tableStore.page, searchText, sorting);
 	}
 </script>
 
-<Table local={false} {...$tableStore} let:visibleRows on:search={onSearch}>
+<Table {...$tableStore} let:visibleRows on:search={onSearch}>
 	<div slot="top">
 		<Search on:search={onSearch} />
 	</div>
@@ -54,15 +56,15 @@
 		<tr>
 			<th>
 				Name
-				<Sort key="name" on:sort={onSort} />
+				<Sort {...getSortAttributes('name', sorting)} on:sort={onSort} />
 			</th>
 			<th>
 				Lastname
-				<Sort key="lastName" on:sort={onSort} />
+				<Sort {...getSortAttributes('lastName', sorting)} on:sort={onSort} />
 			</th>
 			<th>
 				Age
-				<Sort key="age" on:sort={onSort} />
+				<Sort {...getSortAttributes('age', sorting)} on:sort={onSort} />
 			</th>
 		</tr>
 	</thead>

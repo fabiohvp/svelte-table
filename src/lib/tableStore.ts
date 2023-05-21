@@ -1,10 +1,12 @@
 import { filter } from '$lib/filter';
 import { getPaginationBoundaries, getPaginationRowIndex } from '$lib/functions';
-import { sortNumberByKey, sortStringByKey, type SortDirection, type SortFunction } from '$lib/sort';
+import type { SortDirection } from '$lib/interfaces';
+import { sortNumberByKey, sortStringByKey, type SortFunction } from '$lib/sort';
 import { writable, type Readable } from 'svelte/store';
 
 export type TableData<T> = {
 	loading: boolean;
+	local: boolean;
 	page: number;
 	pageSize: number;
 	rows: T[];
@@ -16,6 +18,7 @@ export type TableStore<T> = Readable<TableData<T>> & ReturnType<typeof createTab
 export function createTableStore<T>(initialState: Partial<TableData<T>> = {}) {
 	const { update, subscribe } = writable({
 		loading: false,
+		local: true,
 		page: 0,
 		pageSize: 10,
 		rows: [],

@@ -1,5 +1,3 @@
-import type { SortDirection } from './sort';
-
 export interface PaginationEventArgs {
 	originalEvent: MouseEvent;
 	page: number;
@@ -29,6 +27,8 @@ export interface SearchLabels {
 	placeholder: string;
 }
 
+export type SortDirection = 'asc' | 'desc';
+
 export interface SortEventArgs {
 	originalEvent: MouseEvent;
 	key: string;
@@ -40,6 +40,11 @@ export interface SortLabels {
 	asc: { title: string; html: string };
 	desc: { title: string; html: string };
 	unsorted: { title: string; html: string };
+}
+
+export interface SortParams {
+	key: string;
+	dir: SortDirection;
 }
 
 export interface TableLabels {
