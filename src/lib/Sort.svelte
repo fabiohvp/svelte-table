@@ -10,6 +10,8 @@
 	export let labels: SortLabels = DEFAULT_SORT_LABELS;
 	export let type = 'string';
 
+	$: selected = dir === 'asc' ? labels.asc : dir === 'desc' ? labels.desc : labels.unsorted;
+
 	function onClick(event: MouseEvent) {
 		dir = dir === 'desc' ? 'asc' : 'desc';
 
@@ -23,22 +25,9 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<span class="sort" on:click={onClick}>
-	{#if dir === 'asc'}
-		<span title={labels.asc?.title}>
-			{@html labels.asc?.html}
-		</span>
-	{:else if dir === 'desc'}
-		<span title={labels.desc?.title}>
-			{@html labels.desc?.html}
-		</span>
-	{:else}
-		<span title={labels.unsorted?.title}>
-			{@html labels.unsorted?.html}
-		</span>
-	{/if}
-</span>
+<button class="sort" title={selected?.title} on:click={onClick}>
+	{@html selected?.html}
+</button>
 
 <style>
 	.sort {
